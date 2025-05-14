@@ -17,7 +17,7 @@ func TestTable_ReferenceString(t *testing.T) {
 			tr: Table{
 				Name: "testTable",
 			},
-			want: "testTable",
+			want: `"testTable"`,
 		},
 		{
 			name: "Table With Schema",
@@ -25,7 +25,7 @@ func TestTable_ReferenceString(t *testing.T) {
 				Name:   "testTable",
 				Schema: "testing",
 			},
-			want: "testing.testTable",
+			want: `"testing"."testTable"`,
 		},
 		{
 			name: "Table With Alias",
@@ -34,7 +34,7 @@ func TestTable_ReferenceString(t *testing.T) {
 				Name:   "testTable",
 				Schema: "testing",
 			},
-			want: "tt",
+			want: `"tt"`,
 		},
 	}
 	for _, tt := range tests {
