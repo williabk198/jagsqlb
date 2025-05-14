@@ -71,7 +71,7 @@ func TestSelectorColumn_String(t *testing.T) {
 					Name: "testCol",
 				},
 			},
-			want: `"testCol1"`,
+			want: `"testCol"`,
 		},
 		{
 			name: "Column with Alias",
