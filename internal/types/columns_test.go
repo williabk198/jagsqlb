@@ -23,7 +23,7 @@ func TestColumn_String(t *testing.T) {
 			name: "Column with Table",
 			c: Column{
 				Name:  "testCol",
-				Table: Table{Name: "testTable"},
+				Table: &Table{Name: "testTable"},
 			},
 			want: `"testTable"."testCol"`,
 		},
@@ -31,7 +31,7 @@ func TestColumn_String(t *testing.T) {
 			name: "Column with Table and Schema",
 			c: Column{
 				Name: "testCol",
-				Table: Table{
+				Table: &Table{
 					Name:   "testTable",
 					Schema: "testing",
 				},
@@ -42,7 +42,7 @@ func TestColumn_String(t *testing.T) {
 			name: "Column with Aliased Table",
 			c: Column{
 				Name: "testCol",
-				Table: Table{
+				Table: &Table{
 					Alias:  "t",
 					Name:   "testTable",
 					Schema: "testing",
@@ -86,7 +86,7 @@ func TestSelectorColumn_String(t *testing.T) {
 			sc: SelectorColumn{
 				Column: Column{
 					Name:  "testCol",
-					Table: Table{Name: "testTable"},
+					Table: &Table{Name: "testTable"},
 				},
 			},
 			want: `"testTable"."testCol"`,
@@ -96,7 +96,7 @@ func TestSelectorColumn_String(t *testing.T) {
 			sc: SelectorColumn{
 				Column: Column{
 					Name: "testCol",
-					Table: Table{
+					Table: &Table{
 						Name:   "testTable",
 						Schema: "testing",
 					},
@@ -109,7 +109,7 @@ func TestSelectorColumn_String(t *testing.T) {
 			sc: SelectorColumn{
 				Column: Column{
 					Name: "testCol",
-					Table: Table{
+					Table: &Table{
 						Alias:  "t",
 						Name:   "testTable",
 						Schema: "testing",

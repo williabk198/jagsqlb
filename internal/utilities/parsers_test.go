@@ -108,7 +108,7 @@ func TestParseColumnData(t *testing.T) {
 			args: args{input: "testTable.testCol"},
 			want: intypes.Column{
 				Name:  "testCol",
-				Table: intypes.Table{Name: "testTable"},
+				Table: &intypes.Table{Name: "testTable"},
 			},
 			assertion: assert.NoError,
 		},
@@ -117,7 +117,7 @@ func TestParseColumnData(t *testing.T) {
 			args: args{input: "testing.testTable.testCol"},
 			want: intypes.Column{
 				Name: "testCol",
-				Table: intypes.Table{
+				Table: &intypes.Table{
 					Name:   "testTable",
 					Schema: "testing",
 				},
@@ -129,7 +129,7 @@ func TestParseColumnData(t *testing.T) {
 			args: args{input: `"testing"."testTable"."testCol"`},
 			want: intypes.Column{
 				Name: "testCol",
-				Table: intypes.Table{
+				Table: &intypes.Table{
 					Name:   "testTable",
 					Schema: "testing",
 				},
@@ -194,7 +194,7 @@ func TestParseSelectorColumnData(t *testing.T) {
 				Alias: "tc",
 				Column: intypes.Column{
 					Name: "testCol",
-					Table: intypes.Table{
+					Table: &intypes.Table{
 						Name:   "testTable",
 						Schema: "testing",
 					},

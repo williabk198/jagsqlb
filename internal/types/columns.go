@@ -2,7 +2,7 @@ package intypes
 
 type Column struct {
 	Name  string
-	Table Table
+	Table *Table
 }
 
 func (c Column) String() string {
