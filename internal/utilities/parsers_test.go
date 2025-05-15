@@ -63,6 +63,11 @@ func TestParseTableData(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name:      "Error, Empty Input",
+			args:      args{input: ""},
+			assertion: assert.Error,
+		},
+		{
 			name:      "Error; Missing Schema",
 			args:      args{input: ".testTable"},
 			assertion: assert.Error,
@@ -135,6 +140,11 @@ func TestParseColumnData(t *testing.T) {
 				},
 			},
 			assertion: assert.NoError,
+		},
+		{
+			name:      "Error; Empty Input",
+			args:      args{input: ""},
+			assertion: assert.Error,
 		},
 		{
 			name:      "Error; Missing Table Name",
