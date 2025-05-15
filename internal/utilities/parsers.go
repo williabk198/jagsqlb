@@ -59,8 +59,33 @@ func ParseTableData(tableStr string) (intypes.Table, error) {
 	}, nil
 }
 
-func ParseColumnData(input string) (intypes.Column, error) {
-	panic("unimplemented")
+func ParseColumnData(columnStr string) (intypes.Column, error) {
+	// strip out all quotes
+	input := strings.ReplaceAll(columnStr, "\"", "")
+	input = strings.TrimSpace(input)
+	// replace all consecutive whitespace characters with a single space character
+	input = extraWhitespaceRegex.ReplaceAllString(input, " ")
+
+	var table *intypes.Table
+	lastPeriodIndex := strings.LastIndex(input, ".")
+	if lastPeriodIndex != -1 {
+		tableStr := input[:lastPeriodIndex]
+		t, err := ParseTableData(tableStr)
+		if err != nil {
+			return intypes.Column{}, intypes.NewInvalidSytaxError(fmt.Sprintf("failed to parse table data provided in %q", columnStr))
+		}
+		table = &t
+		input = strings.TrimSpace(input[lastPeriodIndex+1:])
+	}
+
+	if input == "" {
+		return intypes.Column{}, intypes.NewInvalidSytaxError("column name was not provided")
+	}
+
+	return intypes.Column{
+		Name:  input,
+		Table: table,
+	}, nil
 }
 
 func ParseSelectorColumnData(input string) (intypes.SelectorColumn, error) {
