@@ -48,6 +48,10 @@ func ParseTableData(tableStr string) (intypes.Table, error) {
 		return intypes.Table{}, fmt.Errorf("failed to parse table alias in %q: %w", tableStr, err)
 	}
 
+	if input == "" {
+		return intypes.Table{}, intypes.NewInvalidSytaxError("table name not provided")
+	}
+
 	return intypes.Table{
 		Alias:  alias,
 		Name:   input,
