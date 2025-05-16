@@ -1,5 +1,7 @@
 package inutilities
 
+// TODO: Move this file and associated test to a "parsers" sub-package
+
 import (
 	"fmt"
 	"regexp"
@@ -39,7 +41,6 @@ func ParseTableData(tableStr string) (intypes.Table, error) {
 
 	// attempt to get table alias by searching for "AS"
 	alias, err := getAlias(&input, "AS")
-
 	// if the alias was not found, and there wasn't an error then try to get the alias by looking for the space.
 	if err == nil && alias == "" {
 		alias, err = getAlias(&input, " ")
@@ -72,10 +73,18 @@ func ParseColumnData(columnStr string) (intypes.Column, error) {
 		tableStr := input[:lastPeriodIndex]
 		t, err := ParseTableData(tableStr)
 		if err != nil {
-			return intypes.Column{}, intypes.NewInvalidSytaxError(fmt.Sprintf("failed to parse table data provided in %q", columnStr))
+			return intypes.Column{}, fmt.Errorf("failed to parse table data provided in %q: %w", columnStr, err)
 		}
 		table = &t
 		input = strings.TrimSpace(input[lastPeriodIndex+1:])
+	}
+
+	// strip out the alias, if one was given
+	alias, err := getAlias(&input, "AS")
+	if err == nil && alias == "" {
+		// if an alias wasn't found using "AS" then try to find the alias using " "
+		// the actually result here doesn't matter, just mutating `input` to remove the alias
+		getAlias(&input, " ")
 	}
 
 	if input == "" {
@@ -88,9 +97,51 @@ func ParseColumnData(columnStr string) (intypes.Column, error) {
 	}, nil
 }
 
-func ParseSelectorColumnData(input string) (intypes.SelectorColumn, error) {
-	// TODO: Use ParseColumnData and then parse out the column alias if it exsists
-	panic("unimplemented")
+func ParseSelectorColumnData(selectorColumnStr string) (intypes.SelectorColumn, error) {
+	// Decided not to use `PraseColumnData` here. That's because it runs `getAlias` to strip
+	// out the alias to isolate the column name, and the alias is discarded. Which means a second
+	// call to `getAlias` would be needed here to parse out the alias value, and that seemed inefficient.
+
+	// TODO: Refactor. Move the string modifications to its own function since both `ParseColumnData` and
+	//       `ParseTableData` use this exact functionality as well
+
+	// strip out all quotes
+	input := strings.ReplaceAll(selectorColumnStr, "\"", "")
+	input = strings.TrimSpace(input)
+	// replace all consecutive whitespace characters with a single space character
+	input = extraWhitespaceRegex.ReplaceAllString(input, " ")
+
+	//TODO: Refactor. Move the bellow block to its own function since `ParseColumnData` uses this
+	// functionality as well
+	var table *intypes.Table
+	lastPeriodIndex := strings.LastIndex(input, ".")
+	if lastPeriodIndex != -1 {
+		tableStr := input[:lastPeriodIndex]
+		t, err := ParseTableData(tableStr)
+		if err != nil {
+			return intypes.SelectorColumn{}, fmt.Errorf("failed to parse table data provided in %q: %w", selectorColumnStr, err)
+		}
+		table = &t
+		input = strings.TrimSpace(input[lastPeriodIndex+1:])
+	}
+
+	// attempt to get table alias by searching for "AS"
+	alias, err := getAlias(&input, "AS")
+	// if the alias was not found, and there wasn't an error then try to get the alias by looking for the space.
+	if err == nil && alias == "" {
+		alias, err = getAlias(&input, " ")
+	}
+	if err != nil {
+		return intypes.SelectorColumn{}, fmt.Errorf("failed to parse column alias in %q: %w", selectorColumnStr, err)
+	}
+
+	return intypes.SelectorColumn{
+		Column: intypes.Column{
+			Name:  input,
+			Table: table,
+		},
+		Alias: alias,
+	}, nil
 }
 
 func getAlias(input *string, seperator string) (string, error) {
