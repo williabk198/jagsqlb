@@ -23,12 +23,12 @@ func (c Column) String() string {
 	return sb.String()
 }
 
-type SelectorColumn struct {
+type SelectColumn struct {
 	Alias string
 	Column
 }
 
-func (sc SelectorColumn) String() string {
+func (sc SelectColumn) String() string {
 	result := sc.Column.String()
 	if sc.Alias == "" {
 		return result

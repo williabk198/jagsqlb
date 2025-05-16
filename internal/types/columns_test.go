@@ -61,12 +61,12 @@ func TestColumn_String(t *testing.T) {
 func TestSelectorColumn_String(t *testing.T) {
 	tests := []struct {
 		name string
-		sc   SelectorColumn
+		sc   SelectColumn
 		want string
 	}{
 		{
 			name: "Column Only",
-			sc: SelectorColumn{
+			sc: SelectColumn{
 				Column: Column{
 					Name: "testCol",
 				},
@@ -75,7 +75,7 @@ func TestSelectorColumn_String(t *testing.T) {
 		},
 		{
 			name: "Column with Alias",
-			sc: SelectorColumn{
+			sc: SelectColumn{
 				Alias:  "tc",
 				Column: Column{Name: "testCol"},
 			},
@@ -83,7 +83,7 @@ func TestSelectorColumn_String(t *testing.T) {
 		},
 		{
 			name: "Column with Table",
-			sc: SelectorColumn{
+			sc: SelectColumn{
 				Column: Column{
 					Name:  "testCol",
 					Table: &Table{Name: "testTable"},
@@ -93,7 +93,7 @@ func TestSelectorColumn_String(t *testing.T) {
 		},
 		{
 			name: "Column with Table and Schema",
-			sc: SelectorColumn{
+			sc: SelectColumn{
 				Column: Column{
 					Name: "testCol",
 					Table: &Table{
@@ -106,7 +106,7 @@ func TestSelectorColumn_String(t *testing.T) {
 		},
 		{
 			name: "Column with Aliased Table",
-			sc: SelectorColumn{
+			sc: SelectColumn{
 				Column: Column{
 					Name: "testCol",
 					Table: &Table{
