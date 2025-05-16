@@ -147,6 +147,11 @@ func TestParseColumnData(t *testing.T) {
 			assertion: assert.Error,
 		},
 		{
+			name:      "Error; Excessive Periods",
+			args:      args{input: "invalid.schema.table.column"},
+			assertion: assert.Error,
+		},
+		{
 			name:      "Error; Missing Table Name",
 			args:      args{input: " .testCol"},
 			assertion: assert.Error,
