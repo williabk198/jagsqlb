@@ -8,7 +8,6 @@ import (
 )
 
 type columnParser struct {
-	tableParser Parser[intypes.Table]
 }
 
 func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
@@ -48,7 +47,6 @@ func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
 }
 
 type selectColumnParser struct {
-	tableParser Parser[intypes.Table]
 }
 
 func (scp selectColumnParser) Parse(selectColumnStr string) (intypes.SelectColumn, error) {

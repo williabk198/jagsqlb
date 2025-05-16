@@ -12,8 +12,7 @@ func Test_columnParser_Parse(t *testing.T) {
 		columnStr string
 	}
 
-	testTableParser := tableParser{}
-	testColumnParser := columnParser{tableParser: testTableParser}
+	testColumnParser := columnParser{}
 
 	tests := []struct {
 		name      string
@@ -101,6 +100,10 @@ func Test_columnParser_Parse(t *testing.T) {
 			args:      args{columnStr: "testing. .testCol"},
 			assertion: assert.Error,
 		},
+		{
+			name: "Error; Alias Provided",
+			cp:   columnParser{},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -116,8 +119,7 @@ func Test_selectColumnParser_Parse(t *testing.T) {
 		selectColumnStr string
 	}
 
-	testTableParser := tableParser{}
-	testSelectColumnParser := selectColumnParser{tableParser: testTableParser}
+	testSelectColumnParser := selectColumnParser{}
 
 	tests := []struct {
 		name      string
