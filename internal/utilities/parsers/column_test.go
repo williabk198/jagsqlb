@@ -101,8 +101,16 @@ func Test_columnParser_Parse(t *testing.T) {
 			assertion: assert.Error,
 		},
 		{
-			name: "Error; Alias Provided",
-			cp:   columnParser{},
+			name:      "Error; Alias Provided",
+			cp:        columnParser{},
+			args:      args{columnStr: "testCol tc"},
+			assertion: assert.Error,
+		},
+		{
+			name:      "Error; Alias Partially Provided",
+			cp:        columnParser{},
+			args:      args{columnStr: "testCol AS "},
+			assertion: assert.Error,
 		},
 	}
 	for _, tt := range tests {

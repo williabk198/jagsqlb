@@ -30,7 +30,7 @@ func getTableData(input *string) (*intypes.Table, error) {
 	if splitLen := len(splitInput); splitLen == 2 {
 		schema = strings.TrimSpace(splitInput[0])
 		if schema == "" {
-			return nil, intypes.NewInvalidSytaxError("schema name was not provided")
+			return nil, intypes.ErrMissingSchemaName
 		}
 
 		*input = strings.TrimSpace(splitInput[1])
@@ -39,7 +39,7 @@ func getTableData(input *string) (*intypes.Table, error) {
 	}
 
 	if *input == "" {
-		return nil, intypes.NewInvalidSytaxError("table name was not provided")
+		return nil, intypes.ErrMissingTableName
 	}
 
 	return &intypes.Table{
@@ -59,7 +59,7 @@ func getAlias(input *string, seperator string) (string, error) {
 
 		alias = strings.TrimSpace(splitInput[1])
 		if alias == "" {
-			return "", intypes.NewInvalidSytaxError("alias name not provided")
+			return "", intypes.ErrMissingAliasName
 		}
 	} else if splitLen > 2 {
 		return "", intypes.NewInvalidSytaxError(fmt.Sprintf("multiple occurences of %q", seperator))

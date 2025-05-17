@@ -1,6 +1,7 @@
 package parsers
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -28,16 +29,28 @@ func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
 		}
 	}
 
-	// strip out the alias, if one was given
+	// Check to see if an alias was given
 	alias, err := getAlias(&input, "AS")
 	if err == nil && alias == "" {
-		// if an alias wasn't found using "AS" then try to find the alias using " "
-		// the actually result here doesn't matter, just mutating `input` to remove the alias
-		getAlias(&input, " ")
+		// If an alias wasn't found using "AS" then try to find the alias using " ".
+		// The error here doesn't matter. We just want to ensure that the alias
+		// we get back is an empty string
+		alias, _ = getAlias(&input, " ")
+	}
+	if err != nil {
+		// If the user attempted to give an alias to a column, then error out.
+		if errors.Is(err, intypes.ErrMissingAliasName) {
+			return intypes.Column{}, intypes.NewInvalidSytaxError("partial alias definition in non-select column")
+		}
+	}
+
+	// If the user gave an alias to this column, then return an error.
+	if alias != "" {
+		return intypes.Column{}, intypes.NewInvalidSytaxError("alias was provided to non-select column")
 	}
 
 	if input == "" {
-		return intypes.Column{}, intypes.NewInvalidSytaxError("column name was not provided")
+		return intypes.Column{}, intypes.ErrMissingColumnName
 	}
 
 	return intypes.Column{
