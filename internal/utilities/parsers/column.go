@@ -59,6 +59,10 @@ func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
 	}, nil
 }
 
+func NewColumnParser() Parser[intypes.Column] {
+	return columnParser{}
+}
+
 type selectColumnParser struct {
 }
 
@@ -98,4 +102,8 @@ func (scp selectColumnParser) Parse(selectColumnStr string) (intypes.SelectColum
 		},
 		Alias: alias,
 	}, nil
+}
+
+func NewSelectColumnParser() Parser[intypes.SelectColumn] {
+	return selectColumnParser{}
 }
