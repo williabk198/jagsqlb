@@ -30,13 +30,7 @@ func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
 	}
 
 	// Check to see if an alias was given
-	alias, err := getAlias(&input, "AS")
-	if err == nil && alias == "" {
-		// If an alias wasn't found using "AS" then try to find the alias using " ".
-		// The error here doesn't matter. We just want to ensure that the alias
-		// we get back is an empty string
-		alias, _ = getAlias(&input, " ")
-	}
+	alias, input, err := getAlias(input)
 	if err != nil {
 		// If the user attempted to give an alias to a column, then error out.
 		if errors.Is(err, intypes.ErrMissingAliasName) {
@@ -73,31 +67,26 @@ func (scp selectColumnParser) Parse(selectColumnStr string) (intypes.SelectColum
 
 	var err error
 	var table *intypes.Table
-	input := sanitizeInput(selectColumnStr)
+	remainder := sanitizeInput(selectColumnStr)
 
-	lastPeriodIndex := strings.LastIndex(input, ".")
+	lastPeriodIndex := strings.LastIndex(remainder, ".")
 	if lastPeriodIndex != -1 {
-		tableStr := input[:lastPeriodIndex]
+		tableStr := remainder[:lastPeriodIndex]
 		table, err = getTableData(&tableStr)
 		if err != nil {
 			return intypes.SelectColumn{}, fmt.Errorf("failed to parse table data provided in %q: %w", selectColumnStr, err)
 		}
-		input = strings.TrimSpace(input[lastPeriodIndex+1:])
+		remainder = strings.TrimSpace(remainder[lastPeriodIndex+1:])
 	}
 
-	// attempt to get table alias by searching for "AS"
-	alias, err := getAlias(&input, "AS")
-	// if the alias was not found, and there wasn't an error then try to get the alias by looking for the space.
-	if err == nil && alias == "" {
-		alias, err = getAlias(&input, " ")
-	}
+	alias, remainder, err := getAlias(remainder)
 	if err != nil {
 		return intypes.SelectColumn{}, fmt.Errorf("failed to parse column alias in %q: %w", selectColumnStr, err)
 	}
 
 	return intypes.SelectColumn{
 		Column: intypes.Column{
-			Name:  input,
+			Name:  remainder,
 			Table: table,
 		},
 		Alias: alias,

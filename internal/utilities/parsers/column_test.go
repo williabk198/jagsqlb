@@ -170,6 +170,12 @@ func Test_selectColumnParser_Parse(t *testing.T) {
 			args:      args{selectColumnStr: "testCol AS "},
 			assertion: assert.Error,
 		},
+		{
+			name:      "Error; Bad Table Data",
+			scp:       testSelectColumnParser,
+			args:      args{selectColumnStr: ".testTable.testCol tc"},
+			assertion: assert.Error,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

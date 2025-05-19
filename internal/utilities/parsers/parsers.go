@@ -48,22 +48,39 @@ func getTableData(input *string) (*intypes.Table, error) {
 	}, nil
 }
 
-func getAlias(input *string, seperator string) (string, error) {
-	var alias string
-	splitInput := strings.Split(*input, seperator)
-	if splitLen := len(splitInput); splitLen == 2 {
-		*input = strings.TrimSpace(splitInput[0])
-		if *input == "" {
-			return "", intypes.NewInvalidSytaxError("value before alias definition is empty or whitespace")
+func getAlias(input string) (alias, remainder string, err error) {
+	seprators := []string{"AS", " "} // "AS" needs to be first here. If " " is first, then a false error will be returned for `multiple occurences of " "`
+	remainder = input
+
+	// attempt to parse out the alias using the pre-defined seperators
+	for _, sep := range seprators {
+		splitInput := strings.Split(input, sep)
+		if splitLen := len(splitInput); splitLen == 2 {
+			remainder = strings.TrimSpace(splitInput[0])
+			if remainder == "" {
+				return "", "", intypes.NewInvalidSytaxError("value before alias definition is empty or whitespace")
+			}
+
+			alias = strings.TrimSpace(splitInput[1])
+			if alias == "" {
+				return "", "", intypes.ErrMissingAliasName
+			}
+		} else if splitLen > 2 {
+			return "", "", intypes.NewInvalidSytaxError(fmt.Sprintf("multiple occurences of %q", sep))
 		}
 
-		alias = strings.TrimSpace(splitInput[1])
-		if alias == "" {
-			return "", intypes.ErrMissingAliasName
+		if alias != "" {
+			break
 		}
-	} else if splitLen > 2 {
-		return "", intypes.NewInvalidSytaxError(fmt.Sprintf("multiple occurences of %q", seperator))
 	}
 
-	return alias, nil
+	if alias != "" && strings.Contains(alias, " ") {
+		return "", "", intypes.NewInvalidSytaxError(fmt.Sprintf("invalid whitespace in alias name: %q", alias))
+	}
+
+	if strings.Contains(remainder, " ") {
+		return "", "", intypes.NewInvalidSytaxError(fmt.Sprintf("value before alias definition contains white space: %q", remainder))
+	}
+
+	return alias, remainder, nil
 }
