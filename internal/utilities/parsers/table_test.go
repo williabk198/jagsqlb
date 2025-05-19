@@ -92,10 +92,3 @@ func Test_tableParser_Parse(t *testing.T) {
 		})
 	}
 }
-
-func Benchmark_tableParser_Parse(b *testing.B) {
-	tb := tableParser{}
-	for b.Loop() {
-		tb.Parse(`"schema"."table" AS "st"`)
-	}
-}
