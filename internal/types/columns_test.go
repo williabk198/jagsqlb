@@ -50,6 +50,19 @@ func TestColumn_String(t *testing.T) {
 			},
 			want: `"t"."testCol"`,
 		},
+		{
+			name: "Star Column",
+			c:    Column{Name: "*"},
+			want: "*",
+		},
+		{
+			name: "Star Column with Table",
+			c: Column{
+				Name:  "*",
+				Table: &Table{Name: "testTable"},
+			},
+			want: `"testTable".*`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
