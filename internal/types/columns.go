@@ -16,9 +16,13 @@ func (c Column) String() string {
 		sb.WriteRune('.')
 	}
 
-	sb.WriteRune('"')
-	sb.WriteString(c.Name)
-	sb.WriteRune('"')
+	if c.Name == "*" {
+		sb.WriteString(c.Name)
+	} else {
+		sb.WriteRune('"')
+		sb.WriteString(c.Name)
+		sb.WriteRune('"')
+	}
 
 	return sb.String()
 }
@@ -30,7 +34,7 @@ type SelectColumn struct {
 
 func (sc SelectColumn) String() string {
 	result := sc.Column.String()
-	if sc.Alias == "" {
+	if sc.Alias == "" || sc.Name == "*" {
 		return result
 	}
 
