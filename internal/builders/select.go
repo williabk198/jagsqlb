@@ -58,6 +58,10 @@ func (s selectBuilder) Table(table string, columns ...string) builders.SelectBui
 	return s
 }
 
+func (s selectBuilder) Where(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
+	panic("unimplemented")
+}
+
 func NewSelectBuilder(table string, columns ...string) builders.SelectBuilder {
 	sbuilder := selectBuilder{}
 	return sbuilder.Table(table, columns...)
