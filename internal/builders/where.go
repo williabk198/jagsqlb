@@ -6,7 +6,8 @@ import (
 )
 
 type whereBuilder struct {
-	mainQuery builders.Builder
+	mainQuery  builders.Builder
+	conditions []whereCondition
 }
 
 func (w whereBuilder) Build() (query string, queryParams []any, err error) {
@@ -21,6 +22,7 @@ func (w whereBuilder) Or(intypes.Condition, ...intypes.Condition) builders.Where
 	panic("unimplemented")
 }
 
-func NewWhereBuilder() builders.WhereBuilder {
-	return whereBuilder{}
+type whereCondition struct {
+	conjunction string
+	condition   intypes.Condition
 }

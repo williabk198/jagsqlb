@@ -6,9 +6,9 @@ type Condition interface {
 }
 
 type SimpleCondition struct {
-	Column   Column
-	Operator string
-	Values   []any
+	ColumnName string
+	Operator   string
+	Values     []any
 }
 
 func (sc SimpleCondition) Parameterize() (string, []any, error) {
