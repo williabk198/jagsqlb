@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
+	conds "github.com/williabk198/jagsqlb/conditions"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
@@ -268,6 +269,66 @@ func Test_selectBuilder_Table(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equal(t, tt.want, tt.s.Table(tt.args.table, tt.args.columns...))
+		})
+	}
+}
+
+func Test_selectBuilder_Where(t *testing.T) {
+	type args struct {
+		cond            intypes.Condition
+		additionalConds []intypes.Condition
+	}
+	testTable1 := intypes.Table{Name: "table1"}
+	testSelectCol1 := intypes.SelectColumn{Column: intypes.Column{Table: &testTable1, Name: "col1"}}
+	testSelectBuilder := selectBuilder{
+		tables:  []intypes.Table{testTable1},
+		columns: []intypes.SelectColumn{testSelectCol1},
+	}
+	cond1 := conds.Equals("col1", "testing")
+	cond2 := conds.Between("col2", 42, 56)
+	cond3 := conds.GraterThan("col3", 98.76)
+
+	tests := []struct {
+		name string
+		s    selectBuilder
+		args args
+		want builders.WhereBuilder
+	}{
+		{
+			name: "Success; Minimal",
+			s:    testSelectBuilder,
+			args: args{
+				cond: cond1,
+			},
+			want: whereBuilder{
+				mainQuery: testSelectBuilder,
+				conditions: []whereCondition{
+					{
+						condition: cond1,
+					},
+				},
+			},
+		},
+		{
+			name: "Success; Multiple Conditions",
+			s:    testSelectBuilder,
+			args: args{
+				cond:            cond1,
+				additionalConds: []intypes.Condition{cond2, cond3},
+			},
+			want: whereBuilder{
+				mainQuery: testSelectBuilder,
+				conditions: []whereCondition{
+					{condition: cond1},
+					{condition: cond2, conjunction: " AND "},
+					{condition: cond3, conjunction: " AND "},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.s.Where(tt.args.cond, tt.args.additionalConds...))
 		})
 	}
 }
