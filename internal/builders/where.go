@@ -14,11 +14,11 @@ func (w whereBuilder) Build() (query string, queryParams []any, err error) {
 	panic("unimplemented")
 }
 
-func (w whereBuilder) And(intypes.Condition, ...intypes.Condition) builders.WhereBuilder {
+func (w whereBuilder) And(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
 	panic("unimplemented")
 }
 
-func (w whereBuilder) Or(intypes.Condition, ...intypes.Condition) builders.WhereBuilder {
+func (w whereBuilder) Or(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
 	panic("unimplemented")
 }
 
