@@ -9,7 +9,6 @@ type SimpleCondition struct {
 }
 
 func (sc SimpleCondition) Parameterize() (string, []any, error) {
-	// TODO: The returned string should be of the format "<column> <operator> ?"
 	column, err := columnParser.Parse(sc.ColumnName)
 	if err != nil {
 		return "", nil, fmt.Errorf("failed to parse column data: %w", err)
