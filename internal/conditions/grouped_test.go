@@ -96,6 +96,17 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 			},
 			assertion: assert.NoError,
 		},
+		{
+			name: "Error; Bad Column Definition",
+			gc: GroupedConditions{
+				Conjunction: " AND ",
+				Conditions: []Condition{
+					SimpleCondition{ColumnName: ".badCol", Operator: "=", Values: []any{"foo"}},
+					SimpleCondition{ColumnName: "goodCol", Operator: "<", Values: []any{52}},
+				},
+			},
+			assertion: assert.Error,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
