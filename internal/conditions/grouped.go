@@ -27,7 +27,10 @@ func (gc GroupedConditions) Parameterize() (string, []any, error) {
 	sb.WriteString(str)
 
 	for i := 1; i < len(gc.Conditions); i++ {
+		sb.WriteRune(' ')
 		sb.WriteString(gc.Conjunction)
+		sb.WriteRune(' ')
+
 		str, err = gc.parameterizeHelper(gc.Conditions[i], &resultParams)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to parameterize condition %q: %w", gc.Conditions[i], err))
