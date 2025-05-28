@@ -34,11 +34,11 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 	}
 
 	testGroupCond1 := GroupedConditions{
-		Conjunction: " OR ",
+		Conjunction: "OR",
 		Conditions:  []Condition{testCond2, testCond3},
 	}
 	testGroupCond2 := GroupedConditions{
-		Conjunction: " AND ",
+		Conjunction: "AND",
 		Conditions:  []Condition{testCond1, testCond4},
 	}
 
@@ -51,7 +51,7 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 		{
 			name: "Success; Grouped AND",
 			gc: GroupedConditions{
-				Conjunction: " AND ",
+				Conjunction: "AND",
 				Conditions:  []Condition{testCond1, testCond2},
 			},
 			wants: wants{
@@ -63,7 +63,7 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 		{
 			name: "Success; Grouped AND with Nested Group",
 			gc: GroupedConditions{
-				Conjunction: " AND ",
+				Conjunction: "AND",
 				Conditions:  []Condition{testGroupCond1, testCond1, testCond4},
 			},
 			wants: wants{
@@ -75,7 +75,7 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 		{
 			name: "Success; Grouped OR",
 			gc: GroupedConditions{
-				Conjunction: " OR ",
+				Conjunction: "OR",
 				Conditions:  []Condition{testCond3, testCond4},
 			},
 			wants: wants{
@@ -87,7 +87,7 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 		{
 			name: "Success; Grouped OR wih Nested Group",
 			gc: GroupedConditions{
-				Conjunction: " OR ",
+				Conjunction: "OR",
 				Conditions:  []Condition{testCond2, testGroupCond2, testCond3},
 			},
 			wants: wants{
@@ -99,7 +99,7 @@ func TestGroupedConditions_Parameterize(t *testing.T) {
 		{
 			name: "Error; Bad Column Definition",
 			gc: GroupedConditions{
-				Conjunction: " AND ",
+				Conjunction: "AND",
 				Conditions: []Condition{
 					SimpleCondition{ColumnName: ".badCol", Operator: "=", Values: []any{"foo"}},
 					SimpleCondition{ColumnName: "goodCol", Operator: "<", Values: []any{52}},

@@ -106,7 +106,7 @@ func Test_whereBuilder_And(t *testing.T) {
 			want: whereBuilder{
 				conditions: []whereCondition{
 					testWhereCond1,
-					{conjunction: " AND ", condition: testCondInput1},
+					{conjunction: "AND", condition: testCondInput1},
 				},
 			},
 		},
@@ -122,8 +122,8 @@ func Test_whereBuilder_And(t *testing.T) {
 			want: whereBuilder{
 				conditions: []whereCondition{
 					testWhereCond1,
-					{conjunction: " AND ", condition: testCondInput1},
-					{conjunction: " AND ", condition: testCondInput2},
+					{conjunction: "AND", condition: testCondInput1},
+					{conjunction: "AND", condition: testCondInput2},
 				},
 			},
 		},
@@ -164,7 +164,7 @@ func Test_whereBuilder_Or(t *testing.T) {
 			want: whereBuilder{
 				conditions: []whereCondition{
 					testWhereCond1,
-					{conjunction: " OR ", condition: testCondInput1},
+					{conjunction: "OR", condition: testCondInput1},
 				},
 			},
 		},
@@ -180,8 +180,8 @@ func Test_whereBuilder_Or(t *testing.T) {
 			want: whereBuilder{
 				conditions: []whereCondition{
 					testWhereCond1,
-					{conjunction: " OR ", condition: testCondInput1},
-					{conjunction: " OR ", condition: testCondInput2},
+					{conjunction: "OR", condition: testCondInput1},
+					{conjunction: "OR", condition: testCondInput2},
 				},
 			},
 		},
