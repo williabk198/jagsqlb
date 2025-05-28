@@ -31,7 +31,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT "t1"."col1" "t1"."col2" FROM "table1" AS "t1" WHERE "col1" = $1 OR "col2" NOT BETWEEN $2 AND $3;`,
+				query:  `SELECT "col1", "col2" FROM "table1" AS "t1" WHERE "col1" = $1 OR "col2" NOT BETWEEN $2 AND $3;`,
 				params: []any{"test", 10, 23},
 			},
 			assertion: assert.NoError,
@@ -46,7 +46,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT * FROM "table1" WHERE ("col1" = $1 OR "col2" >= $2 ) AND ("col3" NOT IN $3 OR "col2" < $4 )`,
+				query:  `SELECT * FROM "table1" WHERE ("col1" = $1 OR "col2" >= $2) AND ("col3" NOT IN $3 OR "col2" < $4);`,
 				params: []any{"test", 52, []any{"test", "testing"}, 52},
 			},
 			assertion: assert.NoError,
@@ -61,7 +61,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT * FROM "table1" WHERE ("col1" = $1 AND "col2" >= $2 ) OR "col3" < $3`,
+				query:  `SELECT * FROM "table1" WHERE ("col1" = $1 AND "col2" >= $2) OR "col3" < $3;`,
 				params: []any{"test", 52, 128},
 			},
 			assertion: assert.NoError,
