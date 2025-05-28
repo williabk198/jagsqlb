@@ -2,7 +2,7 @@ package inbuilders
 
 import (
 	"github.com/williabk198/jagsqlb/builders"
-	intypes "github.com/williabk198/jagsqlb/internal/types"
+	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 )
 
 type whereBuilder struct {
@@ -14,15 +14,15 @@ func (w whereBuilder) Build() (query string, queryParams []any, err error) {
 	panic("unimplemented")
 }
 
-func (w whereBuilder) And(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
+func (w whereBuilder) And(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
 	panic("unimplemented")
 }
 
-func (w whereBuilder) Or(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
+func (w whereBuilder) Or(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
 	panic("unimplemented")
 }
 
 type whereCondition struct {
 	conjunction string
-	condition   intypes.Condition
+	condition   inconds.Condition
 }
