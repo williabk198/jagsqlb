@@ -89,7 +89,7 @@ func GroupedAnd(cond1, cond2 inconds.Condition, additionalConds ...inconds.Condi
 	conds = append(conds, additionalConds...)
 
 	return inconds.GroupedConditions{
-		Conjunction: " AND ",
+		Conjunction: "AND",
 		Conditions:  conds,
 	}
 }
@@ -99,7 +99,7 @@ func GroupedOr(cond1, cond2 inconds.Condition, additionalConds ...inconds.Condit
 	conds = append(conds, additionalConds...)
 
 	return inconds.GroupedConditions{
-		Conjunction: " OR ",
+		Conjunction: "OR",
 		Conditions:  conds,
 	}
 }
