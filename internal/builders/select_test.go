@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
 	conds "github.com/williabk198/jagsqlb/conditions"
+	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
@@ -275,8 +276,8 @@ func Test_selectBuilder_Table(t *testing.T) {
 
 func Test_selectBuilder_Where(t *testing.T) {
 	type args struct {
-		cond            intypes.Condition
-		additionalConds []intypes.Condition
+		cond            inconds.Condition
+		additionalConds []inconds.Condition
 	}
 	testTable1 := intypes.Table{Name: "table1"}
 	testSelectCol1 := intypes.SelectColumn{Column: intypes.Column{Table: &testTable1, Name: "col1"}}
@@ -314,7 +315,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 			s:    testSelectBuilder,
 			args: args{
 				cond:            cond1,
-				additionalConds: []intypes.Condition{cond2, cond3},
+				additionalConds: []inconds.Condition{cond2, cond3},
 			},
 			want: whereBuilder{
 				mainQuery: testSelectBuilder,

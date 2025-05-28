@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
 	conds "github.com/williabk198/jagsqlb/conditions"
-	intypes "github.com/williabk198/jagsqlb/internal/types"
+	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 )
 
 func Test_whereBuilder_Build(t *testing.T) {
@@ -79,8 +79,8 @@ func Test_whereBuilder_Build(t *testing.T) {
 
 func Test_whereBuilder_And(t *testing.T) {
 	type args struct {
-		cond            intypes.Condition
-		additionalConds []intypes.Condition
+		cond            inconds.Condition
+		additionalConds []inconds.Condition
 	}
 
 	testWhereCond1 := whereCondition{
@@ -117,7 +117,7 @@ func Test_whereBuilder_And(t *testing.T) {
 			},
 			args: args{
 				cond:            testCondInput1,
-				additionalConds: []intypes.Condition{testCondInput2},
+				additionalConds: []inconds.Condition{testCondInput2},
 			},
 			want: whereBuilder{
 				conditions: []whereCondition{
@@ -137,8 +137,8 @@ func Test_whereBuilder_And(t *testing.T) {
 
 func Test_whereBuilder_Or(t *testing.T) {
 	type args struct {
-		cond            intypes.Condition
-		additionalConds []intypes.Condition
+		cond            inconds.Condition
+		additionalConds []inconds.Condition
 	}
 
 	testWhereCond1 := whereCondition{
@@ -175,7 +175,7 @@ func Test_whereBuilder_Or(t *testing.T) {
 			},
 			args: args{
 				cond:            testCondInput1,
-				additionalConds: []intypes.Condition{testCondInput2},
+				additionalConds: []inconds.Condition{testCondInput2},
 			},
 			want: whereBuilder{
 				conditions: []whereCondition{

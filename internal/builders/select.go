@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/williabk198/jagsqlb/builders"
+	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	inutilities "github.com/williabk198/jagsqlb/internal/utilities"
 )
@@ -58,7 +59,7 @@ func (s selectBuilder) Table(table string, columns ...string) builders.SelectBui
 	return s
 }
 
-func (s selectBuilder) Where(cond intypes.Condition, additionalConds ...intypes.Condition) builders.WhereBuilder {
+func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
 	panic("unimplemented")
 }
 
