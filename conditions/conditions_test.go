@@ -334,7 +334,7 @@ func TestGroupedAnd(t *testing.T) {
 				cond2: testCond2,
 			},
 			want: inconds.GroupedConditions{
-				Conjunction: " AND ",
+				Conjunction: "AND",
 				Conditions:  []inconds.Condition{testCond1, testCond2},
 			},
 		},
@@ -346,7 +346,7 @@ func TestGroupedAnd(t *testing.T) {
 				additionalConds: []inconds.Condition{testCond3},
 			},
 			want: inconds.GroupedConditions{
-				Conjunction: " AND ",
+				Conjunction: "AND",
 				Conditions:  []inconds.Condition{testCond1, testCond2, testCond3},
 			},
 		},
@@ -381,7 +381,7 @@ func TestGroupedOr(t *testing.T) {
 				cond2: testCond2,
 			},
 			want: inconds.GroupedConditions{
-				Conjunction: " OR ",
+				Conjunction: "OR",
 				Conditions:  []inconds.Condition{testCond1, testCond2},
 			},
 		},
@@ -393,7 +393,7 @@ func TestGroupedOr(t *testing.T) {
 				additionalConds: []inconds.Condition{testCond3},
 			},
 			want: inconds.GroupedConditions{
-				Conjunction: " OR ",
+				Conjunction: "OR",
 				Conditions:  []inconds.Condition{testCond1, testCond2, testCond3},
 			},
 		},

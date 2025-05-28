@@ -27,7 +27,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				mainQuery: NewSelectBuilder("table1 AS t1", "col1", "col2"),
 				conditions: []whereCondition{
 					{condition: conds.Equals("col1", "test")},
-					{condition: conds.NotBetween("col2", 10, 23), conjunction: " OR "},
+					{condition: conds.NotBetween("col2", 10, 23), conjunction: "OR"},
 				},
 			},
 			wants: wants{
@@ -42,7 +42,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				mainQuery: NewSelectBuilder("table1", "*"),
 				conditions: []whereCondition{
 					{condition: conds.GroupedOr(conds.Equals("col1", "test"), conds.GreaterThanEqual("col2", 52))},
-					{condition: conds.GroupedOr(conds.NotIn("col3", []any{"test", "testing"}), conds.LessThan("col2", 52)), conjunction: " AND "},
+					{condition: conds.GroupedOr(conds.NotIn("col3", []any{"test", "testing"}), conds.LessThan("col2", 52)), conjunction: "AND"},
 				},
 			},
 			wants: wants{
@@ -57,7 +57,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 				mainQuery: NewSelectBuilder("table1", "*"),
 				conditions: []whereCondition{
 					{condition: conds.GroupedAnd(conds.Equals("col1", "test"), conds.GreaterThanEqual("col2", 52))},
-					{condition: conds.LessThan("col3", 128), conjunction: " OR "},
+					{condition: conds.LessThan("col3", 128), conjunction: "OR"},
 				},
 			},
 			wants: wants{
