@@ -140,7 +140,7 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 			name: "Success; Not Between",
 			sc: SimpleCondition{
 				ColumnName: "col1",
-				Operator:   "BETWEEN",
+				Operator:   "NOT BETWEEN",
 				Values:     []any{42, 56},
 			},
 			wants: wants{
