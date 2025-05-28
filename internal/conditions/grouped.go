@@ -21,7 +21,7 @@ func (gc GroupedConditions) Parameterize() (string, []any, error) {
 
 	str, err := gc.parameterizeHelper(gc.Conditions[0], &resultParams)
 	if err != nil {
-		errs = append(errs, fmt.Errorf("failed to parameterize condition %q: %w", gc.Conditions[0], err))
+		errs = append(errs, fmt.Errorf("failed to parameterize sub-condition %q: %w", gc.Conditions[0], err))
 	}
 
 	sb.WriteString(str)
@@ -33,7 +33,7 @@ func (gc GroupedConditions) Parameterize() (string, []any, error) {
 
 		str, err = gc.parameterizeHelper(gc.Conditions[i], &resultParams)
 		if err != nil {
-			errs = append(errs, fmt.Errorf("failed to parameterize condition %q: %w", gc.Conditions[i], err))
+			errs = append(errs, fmt.Errorf("failed to parameterize sub-condition %q: %w", gc.Conditions[i], err))
 			continue
 		}
 		sb.WriteString(str)
