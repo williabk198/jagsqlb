@@ -60,7 +60,18 @@ func (s selectBuilder) Table(table string, columns ...string) builders.SelectBui
 }
 
 func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
-	panic("unimplemented")
+	var wb builders.WhereBuilder = whereBuilder{
+		mainQuery: s,
+		conditions: []whereCondition{
+			{condition: cond},
+		},
+	}
+
+	if len(additionalConds) > 0 {
+		wb = wb.And(additionalConds[0], additionalConds[1:]...)
+	}
+
+	return wb
 }
 
 func NewSelectBuilder(table string, columns ...string) builders.SelectBuilder {
