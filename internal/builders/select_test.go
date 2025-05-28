@@ -321,8 +321,8 @@ func Test_selectBuilder_Where(t *testing.T) {
 				mainQuery: testSelectBuilder,
 				conditions: []whereCondition{
 					{condition: cond1},
-					{condition: cond2, conjunction: " AND "},
-					{condition: cond3, conjunction: " AND "},
+					{condition: cond2, conjunction: "AND"},
+					{condition: cond3, conjunction: "AND"},
 				},
 			},
 		},
