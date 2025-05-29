@@ -33,6 +33,18 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; Equals w/ ColumnValue",
+			sc: SimpleCondition{
+				ColumnName: "t1.col1",
+				Operator:   "=",
+				Values:     []any{ColumnValue{ColumnName: "t2.col2"}},
+			},
+			wants: wants{
+				query: `"t1"."col1" = "t2"."col2"`,
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Success; Not Equals",
 			sc: SimpleCondition{
 				ColumnName: "col1",

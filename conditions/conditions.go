@@ -4,6 +4,10 @@ import (
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 )
 
+func ColumnValue(columnName string) inconds.ColumnValue {
+	panic("unimplemented")
+}
+
 func Equals(columnName string, value any) inconds.Condition {
 	return inconds.SimpleCondition{
 		ColumnName: columnName,

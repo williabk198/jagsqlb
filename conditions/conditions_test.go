@@ -7,6 +7,32 @@ import (
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 )
 
+func TestColumnValue(t *testing.T) {
+	type args struct {
+		columnName string
+	}
+	tests := []struct {
+		name string
+		args args
+		want inconds.ColumnValue
+	}{
+		{
+			name: "Success",
+			args: args{
+				columnName: "testColumn",
+			},
+			want: inconds.ColumnValue{
+				ColumnName: "testColumn",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, ColumnValue(tt.args.columnName))
+		})
+	}
+}
+
 func TestEquals(t *testing.T) {
 	type args struct {
 		columnName string
