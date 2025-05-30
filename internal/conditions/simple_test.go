@@ -149,6 +149,31 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; Between with One ColumnValue",
+			sc: SimpleCondition{
+				ColumnName: "t1.col1",
+				Operator:   "BETWEEN",
+				Values:     []any{83, ColumnValue{ColumnName: "t2.col1"}},
+			},
+			wants: wants{
+				query:  `"t1"."col1" BETWEEN ? AND "t2"."col1"`,
+				params: []any{83},
+			},
+			assertion: assert.NoError,
+		},
+		{
+			name: "Success: Between with Two ColumnValues",
+			sc: SimpleCondition{
+				ColumnName: "t1.col1",
+				Operator:   "BETWEEN",
+				Values:     []any{ColumnValue{ColumnName: "t2.col1"}, ColumnValue{ColumnName: "t2.col2"}},
+			},
+			wants: wants{
+				query: `"t1"."col1" BETWEEN "t2"."col1" AND "t2"."col2"`,
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Success; Not Between",
 			sc: SimpleCondition{
 				ColumnName: "col1",
@@ -167,6 +192,15 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 				ColumnName: ".badColumn",
 				Operator:   "=",
 				Values:     []any{"n/a"},
+			},
+			assertion: assert.Error,
+		},
+		{
+			name: "Error; In Condition Contains ColumnValue",
+			sc: SimpleCondition{
+				ColumnName: "col1",
+				Operator:   "NOT IN",
+				Values:     []any{52, ColumnValue{ColumnName: "t2.col2"}, 77},
 			},
 			assertion: assert.Error,
 		},
