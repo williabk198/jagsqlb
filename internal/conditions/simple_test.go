@@ -40,7 +40,8 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 				Values:     []any{ColumnValue{ColumnName: "t2.col2"}},
 			},
 			wants: wants{
-				query: `"t1"."col1" = "t2"."col2"`,
+				query:  `"t1"."col1" = "t2"."col2"`,
+				params: []any{},
 			},
 			assertion: assert.NoError,
 		},
