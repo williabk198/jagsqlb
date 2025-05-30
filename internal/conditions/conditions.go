@@ -11,11 +11,8 @@ type Condition interface {
 	Parameterize() (string, []any, error)
 }
 
-// ColumnValue represents a column that will be uses as a value in a condition.
-// For example, if you wanted to have a condition like "t1.col1 < t2.col2", then
-// you use ColumnValue like so:
-//
-//	exampleCond := conds.LessThan("t1.col1", conds.ColumnValue{ColumnName: "t2.col2"})
+// ColumnValue represents a column that will be uses as a value within a condition.
+// Meaning, that it facilitates having the following types of conidions: "t1.col1 < t2.col2"
 type ColumnValue struct {
 	ColumnName string
 }

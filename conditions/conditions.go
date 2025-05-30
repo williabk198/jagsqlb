@@ -5,7 +5,9 @@ import (
 )
 
 func ColumnValue(columnName string) inconds.ColumnValue {
-	panic("unimplemented")
+	return inconds.ColumnValue{
+		ColumnName: columnName,
+	}
 }
 
 func Equals(columnName string, value any) inconds.Condition {
