@@ -66,7 +66,7 @@ func (sc SimpleCondition) Parameterize() (string, []any, error) {
 		if err != nil {
 			return "", nil, fmt.Errorf("failed to parse ColumnValue data: %w", err)
 		}
-		return fmt.Sprintf("%s %s %s", column, sc.Operator, columnValStr), nil, nil
+		return fmt.Sprintf("%s %s %s", column, sc.Operator, columnValStr), sc.Values[1:], nil
 	}
 
 	// If the slice of values contains a ColumnValue and this is an "IN" condition, then throw an error.

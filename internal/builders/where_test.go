@@ -39,14 +39,14 @@ func Test_whereBuilder_Build(t *testing.T) {
 		{
 			name: "Success; Simple Conditions w/ ColumnValue",
 			w: whereBuilder{
-				mainQuery: NewSelectBuilder("table1 AS t1").Table("table2 as t2", "col1"),
+				mainQuery: NewSelectBuilder("table1 AS t1").Table("table2 AS t2", "col1"),
 				conditions: []whereCondition{
 					{condition: conds.Equals("t1.col1", inconds.ColumnValue{ColumnName: "t2.col2"})},
 				},
 			},
 			wants: wants{
-				query:  `SELECT "t2"."col1" FROM "table1" AS "t1", "table2" AS "t2" WHERE "t1"."col1" = "t2"."col2"`,
-				params: []any{},
+				query:  `SELECT "t2"."col1" FROM "table1" AS "t1", "table2" AS "t2" WHERE "t1"."col1" = "t2"."col2";`,
+				params: nil,
 			},
 			assertion: assert.NoError,
 		},
