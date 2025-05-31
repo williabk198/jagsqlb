@@ -26,7 +26,7 @@ func NotEquals(columnName string, value any) inconds.Condition {
 	}
 }
 
-func GraterThan(columnName string, value any) inconds.Condition {
+func GreaterThan(columnName string, value any) inconds.Condition {
 	return inconds.SimpleCondition{
 		ColumnName: columnName,
 		Operator:   ">",
