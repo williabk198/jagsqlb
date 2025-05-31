@@ -287,7 +287,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 	}
 	cond1 := conds.Equals("col1", "testing")
 	cond2 := conds.Between("col2", 42, 56)
-	cond3 := conds.GraterThan("col3", 98.76)
+	cond3 := conds.GreaterThan("col3", 98.76)
 
 	tests := []struct {
 		name string

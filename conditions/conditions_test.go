@@ -118,7 +118,7 @@ func TestGraterThan(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.want, GraterThan(tt.args.columnName, tt.args.value))
+			assert.Equal(t, tt.want, GreaterThan(tt.args.columnName, tt.args.value))
 		})
 	}
 }
@@ -345,7 +345,7 @@ func TestGroupedAnd(t *testing.T) {
 	}
 
 	testCond1 := LessThanEqual("t1.col1", 42)
-	testCond2 := GraterThan("col2", 56)
+	testCond2 := GreaterThan("col2", 56)
 	testCond3 := Equals("col3", "testing")
 
 	tests := []struct {
@@ -392,7 +392,7 @@ func TestGroupedOr(t *testing.T) {
 	}
 
 	testCond1 := LessThanEqual("t1.col1", 42)
-	testCond2 := GraterThan("col2", 56)
+	testCond2 := GreaterThan("col2", 56)
 	testCond3 := Equals("col3", "testing")
 
 	tests := []struct {
