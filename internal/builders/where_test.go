@@ -7,6 +7,7 @@ import (
 	"github.com/williabk198/jagsqlb/builders"
 	conds "github.com/williabk198/jagsqlb/conditions"
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/types"
 )
 
 func Test_whereBuilder_Build(t *testing.T) {
@@ -203,6 +204,95 @@ func Test_whereBuilder_Or(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equal(t, tt.want, tt.w.Or(tt.args.cond, tt.args.additionalConds...))
+		})
+	}
+}
+
+func Test_whereBuilder_Limit(t *testing.T) {
+	type args struct {
+		limit uint
+	}
+	tests := []struct {
+		name string
+		w    whereBuilder
+		args args
+		want builders.Builder
+	}{
+		{
+			name: "Success",
+			w:    whereBuilder{},
+			args: args{
+				limit: 100,
+			},
+			want: limitBuilder{
+				precedingBuilder: whereBuilder{},
+				limit:            100,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.w.Limit(tt.args.limit))
+		})
+	}
+}
+
+func Test_whereBuilder_Offset(t *testing.T) {
+	type args struct {
+		offset uint
+	}
+	tests := []struct {
+		name string
+		w    whereBuilder
+		args args
+		want builders.OffsetBuilder
+	}{
+		{
+			name: "Success",
+			w:    whereBuilder{},
+			args: args{
+				offset: 100,
+			},
+			want: offsetBuilder{
+				precedingBuilder: whereBuilder{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.w.Offset(tt.args.offset))
+		})
+	}
+}
+
+func Test_whereBuilder_OrderBy(t *testing.T) {
+	type args struct {
+		ordering      types.ColumnOrdering
+		moreOrderings []types.ColumnOrdering
+	}
+	tests := []struct {
+		name string
+		w    whereBuilder
+		args args
+		want builders.OrderByBuilder
+	}{
+		{
+			name: "Success",
+			w:    whereBuilder{},
+			args: args{
+				ordering: types.ColumnOrdering{ColumnName: "col1", Ordering: types.OrderingAscending},
+			},
+			want: orderByBuilder{
+				precedingBuilder: whereBuilder{},
+				columnOrderings: []types.ColumnOrdering{
+					{ColumnName: "col1", Ordering: types.OrderingAscending},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.w.OrderBy(tt.args.ordering, tt.args.moreOrderings...))
 		})
 	}
 }

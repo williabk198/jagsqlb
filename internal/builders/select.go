@@ -7,6 +7,7 @@ import (
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	inutilities "github.com/williabk198/jagsqlb/internal/utilities"
+	"github.com/williabk198/jagsqlb/types"
 )
 
 type selectBuilder struct {
@@ -72,6 +73,21 @@ func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.
 	}
 
 	return wb
+}
+
+// Limit implements builders.SelectBuilder.
+func (s selectBuilder) Limit(uint) builders.Builder {
+	panic("unimplemented")
+}
+
+// Offset implements builders.SelectBuilder.
+func (s selectBuilder) Offset(uint) builders.OffsetBuilder {
+	panic("unimplemented")
+}
+
+// OrderBy implements builders.SelectBuilder.
+func (s selectBuilder) OrderBy(columnOrder types.ColumnOrdering, moreColumnOrders ...types.ColumnOrdering) builders.OrderByBuilder {
+	panic("unimplemented")
 }
 
 func NewSelectBuilder(table string, columns ...string) builders.SelectBuilder {
