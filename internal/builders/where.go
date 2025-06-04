@@ -6,6 +6,7 @@ import (
 
 	"github.com/williabk198/jagsqlb/builders"
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/types"
 )
 
 type whereBuilder struct {
@@ -78,4 +79,19 @@ func (w whereBuilder) Or(cond inconds.Condition, additionalConds ...inconds.Cond
 type whereCondition struct {
 	conjunction string
 	condition   inconds.Condition
+}
+
+// Limit implements builders.WhereBuilder.
+func (w whereBuilder) Limit(uint) builders.Builder {
+	panic("unimplemented")
+}
+
+// Offset implements builders.WhereBuilder.
+func (w whereBuilder) Offset(uint) builders.OffsetBuilder {
+	panic("unimplemented")
+}
+
+// OrderBy implements builders.WhereBuilder.
+func (w whereBuilder) OrderBy(types.ColumnOrdering, ...types.ColumnOrdering) builders.OrderByBuilder {
+	panic("unimplemented")
 }

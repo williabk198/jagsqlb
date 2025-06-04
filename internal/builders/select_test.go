@@ -8,6 +8,7 @@ import (
 	conds "github.com/williabk198/jagsqlb/conditions"
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
+	"github.com/williabk198/jagsqlb/types"
 )
 
 func Test_selectBuilder_Build(t *testing.T) {
@@ -426,6 +427,96 @@ func TestNewSelectBuilder(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewSelectBuilder(tt.args.table, tt.args.columns...)
 			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_selectBuilder_Limit(t *testing.T) {
+	type args struct {
+		limit uint
+	}
+	tests := []struct {
+		name string
+		s    selectBuilder
+		args args
+		want builders.Builder
+	}{
+		{
+			name: "Success",
+			s:    selectBuilder{},
+			args: args{
+				limit: 50,
+			},
+			want: limitBuilder{
+				precedingBuilder: selectBuilder{},
+				limit:            50,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.s.Limit(tt.args.limit))
+		})
+	}
+}
+
+func Test_selectBuilder_Offset(t *testing.T) {
+	type args struct {
+		offset uint
+	}
+	tests := []struct {
+		name string
+		s    selectBuilder
+		args args
+		want builders.OffsetBuilder
+	}{
+		{
+			name: "Success",
+			s:    selectBuilder{},
+			args: args{
+				offset: 50,
+			},
+			want: offsetBuilder{
+				precedingBuilder: selectBuilder{},
+				offset:           50,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.s.Offset(tt.args.offset))
+		})
+	}
+}
+
+func Test_selectBuilder_OrderBy(t *testing.T) {
+	type args struct {
+		columnOrder      types.ColumnOrdering
+		moreColumnOrders []types.ColumnOrdering
+	}
+	tests := []struct {
+		name string
+		s    selectBuilder
+		args args
+		want builders.OrderByBuilder
+	}{
+		{
+			name: "Success",
+			s:    selectBuilder{},
+			args: args{
+				columnOrder: types.ColumnOrdering{ColumnName: "col1", Ordering: types.OrderingDescending},
+			},
+			want: orderByBuilder{
+				precedingBuilder: selectBuilder{},
+				columnOrderings: []types.ColumnOrdering{
+					{ColumnName: "col1", Ordering: types.OrderingDescending},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.s.OrderBy(tt.args.columnOrder, tt.args.moreColumnOrders...))
 		})
 	}
 }
