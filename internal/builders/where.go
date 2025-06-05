@@ -82,16 +82,25 @@ type whereCondition struct {
 }
 
 // Limit implements builders.WhereBuilder.
-func (w whereBuilder) Limit(uint) builders.Builder {
-	panic("unimplemented")
+func (w whereBuilder) Limit(limit uint) builders.Builder {
+	return limitBuilder{
+		precedingBuilder: w,
+		limit:            limit,
+	}
 }
 
 // Offset implements builders.WhereBuilder.
-func (w whereBuilder) Offset(uint) builders.OffsetBuilder {
-	panic("unimplemented")
+func (w whereBuilder) Offset(offset uint) builders.OffsetBuilder {
+	return offsetBuilder{
+		precedingBuilder: w,
+		offset:           offset,
+	}
 }
 
 // OrderBy implements builders.WhereBuilder.
-func (w whereBuilder) OrderBy(types.ColumnOrdering, ...types.ColumnOrdering) builders.OrderByBuilder {
-	panic("unimplemented")
+func (w whereBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings ...types.ColumnOrdering) builders.OrderByBuilder {
+	return orderByBuilder{
+		precedingBuilder: w,
+		columnOrderings:  append([]types.ColumnOrdering{ordering}, moreOrderings...),
+	}
 }

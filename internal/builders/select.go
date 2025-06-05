@@ -76,18 +76,27 @@ func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.
 }
 
 // Limit implements builders.SelectBuilder.
-func (s selectBuilder) Limit(uint) builders.Builder {
-	panic("unimplemented")
+func (s selectBuilder) Limit(limit uint) builders.Builder {
+	return limitBuilder{
+		precedingBuilder: s,
+		limit:            limit,
+	}
 }
 
 // Offset implements builders.SelectBuilder.
-func (s selectBuilder) Offset(uint) builders.OffsetBuilder {
-	panic("unimplemented")
+func (s selectBuilder) Offset(offset uint) builders.OffsetBuilder {
+	return offsetBuilder{
+		precedingBuilder: s,
+		offset:           offset,
+	}
 }
 
 // OrderBy implements builders.SelectBuilder.
 func (s selectBuilder) OrderBy(columnOrder types.ColumnOrdering, moreColumnOrders ...types.ColumnOrdering) builders.OrderByBuilder {
-	panic("unimplemented")
+	return orderByBuilder{
+		precedingBuilder: s,
+		columnOrderings:  append([]types.ColumnOrdering{columnOrder}, moreColumnOrders...),
+	}
 }
 
 func NewSelectBuilder(table string, columns ...string) builders.SelectBuilder {

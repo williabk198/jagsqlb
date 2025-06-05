@@ -3,6 +3,7 @@ package inbuilders
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/williabk198/jagsqlb/builders"
 	"github.com/williabk198/jagsqlb/internal/utilities/parsers"
@@ -20,15 +21,43 @@ type orderByBuilder struct {
 }
 
 func (obb orderByBuilder) Build() (string, []any, error) {
-	panic("unimplemented")
+	query, params, err := obb.precedingBuilder.Build()
+	if err != nil {
+		return "", nil, err
+	}
+
+	sb := new(strings.Builder)
+	ordering, err := obb.columnOrderings[0].Stringify()
+	if err != nil {
+		return "", nil, err
+	}
+	sb.WriteString(ordering)
+
+	for i := 1; i < len(obb.columnOrderings); i++ {
+		sb.WriteString(", ")
+		ordering, err := obb.columnOrderings[i].Stringify()
+		if err != nil {
+			return "", nil, err
+		}
+		sb.WriteString(ordering)
+	}
+
+	query = fmt.Sprintf("%s ORDER BY %s;", query[:len(query)-1], sb.String())
+	return query, params, nil
 }
 
 func (oob orderByBuilder) Offset(offset uint) builders.OffsetBuilder {
-	panic("unimplemented")
+	return offsetBuilder{
+		precedingBuilder: oob,
+		offset:           offset,
+	}
 }
 
 func (oob orderByBuilder) Limit(limit uint) builders.Builder {
-	panic("unimplemented")
+	return limitBuilder{
+		precedingBuilder: oob,
+		limit:            limit,
+	}
 }
 
 type offsetBuilder struct {
@@ -37,11 +66,20 @@ type offsetBuilder struct {
 }
 
 func (ob offsetBuilder) Build() (string, []any, error) {
-	panic("unimplemented")
+	query, params, err := ob.precedingBuilder.Build()
+	if err != nil {
+		return "", nil, err
+	}
+
+	query = fmt.Sprintf("%s OFFSET %d;", query[:len(query)-1], ob.offset)
+	return query, params, nil
 }
 
 func (ob offsetBuilder) Limit(limit uint) builders.Builder {
-	panic("unimplemented")
+	return limitBuilder{
+		precedingBuilder: ob,
+		limit:            limit,
+	}
 }
 
 type limitBuilder struct {
@@ -50,7 +88,13 @@ type limitBuilder struct {
 }
 
 func (lb limitBuilder) Build() (string, []any, error) {
-	panic("unimplemented")
+	query, params, err := lb.precedingBuilder.Build()
+	if err != nil {
+		return "", nil, err
+	}
+
+	query = fmt.Sprintf("%s OFFSET %d;", query[:len(query)-1], lb.limit)
+	return query, params, nil
 }
 
 // finalizeQuery replaces any "?" characters in the provided query with "$n" characters
