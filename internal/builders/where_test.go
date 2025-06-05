@@ -255,6 +255,7 @@ func Test_whereBuilder_Offset(t *testing.T) {
 			},
 			want: offsetBuilder{
 				precedingBuilder: whereBuilder{},
+				offset:           100,
 			},
 		},
 	}
