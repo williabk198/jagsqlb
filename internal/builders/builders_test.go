@@ -29,8 +29,7 @@ func Test_orderByBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT * FROM "table1" ORDER BY "column1" ASC;`,
-				params: []any{},
+				query: `SELECT * FROM "table1" ORDER BY "column1" ASC;`,
 			},
 			assertion: assert.NoError,
 		},
@@ -43,8 +42,7 @@ func Test_orderByBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT * FROM table1 ORDER BY "column1" DESC;`,
-				params: []any{},
+				query: `SELECT * FROM "table1" ORDER BY "column1" DESC;`,
 			},
 			assertion: assert.NoError,
 		},
@@ -58,8 +56,7 @@ func Test_orderByBuilder_Build(t *testing.T) {
 				},
 			},
 			wants: wants{
-				query:  `SELECT * FROM "table1" ORDER BY "column1" ASC, "column2" DESC;`,
-				params: []any{},
+				query: `SELECT * FROM "table1" ORDER BY "column1" ASC, "column2" DESC;`,
 			},
 			assertion: assert.NoError,
 		},
@@ -184,8 +181,7 @@ func Test_offsetBuilder_Build(t *testing.T) {
 				offset:           100,
 			},
 			wants: wants{
-				query:  `SELECT * FROM "table1" OFFSET 100;`,
-				params: []any{},
+				query: `SELECT * FROM "table1" OFFSET 100;`,
 			},
 			assertion: assert.NoError,
 		},
@@ -255,7 +251,6 @@ func Test_limitBuilder_Build(t *testing.T) {
 			},
 			wants: wants{
 				query: `SELECT "col1" FROM "table1" LIMIT 25`,
-				parms: []any{},
 			},
 		},
 	}
