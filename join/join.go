@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	TypeInner  injoin.Type = "OUTER JOIN"
-	TypeOutter injoin.Type = "INNER JOIN"
+	TypeInner  injoin.Type = "INNER JOIN"
+	TypeOutter injoin.Type = "OUTER JOIN"
 	TypeLeft   injoin.Type = "LEFT JOIN"
 	TypeRight  injoin.Type = "RIGHT JOIN"
 	TypeCross  injoin.Type = "CROSS JOIN"
