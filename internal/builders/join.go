@@ -15,9 +15,9 @@ type joinCondition struct {
 }
 
 type joinBuilder struct {
-	selectBuilder selectBuilder
-	joins         []joinCondition
-	errs          intypes.ErrorSlice
+	selectBuilder
+	joinConditions []joinCondition
+	errs           intypes.ErrorSlice
 }
 
 func (jb joinBuilder) Build() (query string, queryParams []any, err error) {
