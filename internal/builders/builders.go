@@ -93,7 +93,7 @@ func (lb limitBuilder) Build() (string, []any, error) {
 		return "", nil, err
 	}
 
-	query = fmt.Sprintf("%s LIMIT %d;", query[:len(query)-1], lb.limit)
+	query = fmt.Sprintf("%s OFFSET %d;", query[:len(query)-1], lb.limit)
 	return query, params, nil
 }
 
