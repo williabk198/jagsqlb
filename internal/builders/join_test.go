@@ -125,7 +125,7 @@ func Test_joinBuilder_Build(t *testing.T) {
 				joins: []joinCondition{
 					{
 						joinTable:    testTable1,
-						joinType:     join.TypeOutter,
+						joinType:     join.TypeOuter,
 						joinRelation: join.On(conds.Equals(".bad_col", 42)),
 					},
 				},
