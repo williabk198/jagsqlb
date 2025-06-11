@@ -62,7 +62,10 @@ func (s selectBuilder) Table(table string, columns ...string) builders.SelectBui
 }
 
 func (s selectBuilder) Join(joinType injoin.Type, table string, joinRelation injoin.Relation, includeColumns ...string) builders.JoinBuilder {
-	panic("unimplemented")
+	jb := joinBuilder{
+		selectBuilder: s,
+	}
+	return jb.Join(joinType, table, joinRelation, includeColumns...)
 }
 
 func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
