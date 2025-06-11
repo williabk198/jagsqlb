@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	columnParser       = parsers.NewColumnParser()
 	tableParser        = parsers.NewTableParser()
 	selectColumnParser = parsers.NewSelectColumnParser()
 )
