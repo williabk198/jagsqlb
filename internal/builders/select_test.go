@@ -7,7 +7,9 @@ import (
 	"github.com/williabk198/jagsqlb/builders"
 	conds "github.com/williabk198/jagsqlb/conditions"
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
+	"github.com/williabk198/jagsqlb/join"
 	"github.com/williabk198/jagsqlb/types"
 )
 
@@ -271,6 +273,66 @@ func Test_selectBuilder_Table(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equal(t, tt.want, tt.s.Table(tt.args.table, tt.args.columns...))
+		})
+	}
+}
+
+func Test_selectBuilder_Join(t *testing.T) {
+	type args struct {
+		joinType       injoin.Type
+		table          string
+		joinRelation   injoin.Relation
+		includeColumns []string
+	}
+
+	testTable1 := intypes.Table{Alias: "t1", Name: "table1"}
+	testTable2 := intypes.Table{Alias: "t2", Name: "table2"}
+	testColumn1 := intypes.SelectColumn{Column: intypes.Column{Name: "*", Table: &testTable1}}
+	testColumn2 := intypes.SelectColumn{Column: intypes.Column{Name: "col3", Table: &testTable2}}
+
+	testSelectBuilder := selectBuilder{
+		tables:  []intypes.Table{testTable1},
+		columns: []intypes.SelectColumn{testColumn1},
+	}
+
+	tests := []struct {
+		name string
+		s    selectBuilder
+		args args
+		want builders.JoinBuilder
+	}{
+		{
+			name: "Success",
+			s:    testSelectBuilder,
+			args: args{
+				joinType:       join.TypeInner,
+				table:          "table2 AS t2",
+				joinRelation:   join.On(conds.Equals("t1.col1", conds.ColumnValue("t2.col2"))),
+				includeColumns: []string{"col3"},
+			},
+			want: joinBuilder{
+				selectBuilder: selectBuilder{
+					tables:  []intypes.Table{testTable1},
+					columns: []intypes.SelectColumn{testColumn1, testColumn2},
+				},
+				joins: []joinCondition{
+					{
+						joinTable: intypes.Table{Alias: "t2", Name: "table2"},
+						joinType:  join.TypeInner,
+						joinRelation: injoin.Relation{
+							Keyword: "ON",
+							Relation: []inconds.Condition{
+								conds.Equals("t1.col1", conds.ColumnValue("t2.col2")),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.s.Join(tt.args.joinType, tt.args.table, tt.args.joinRelation, tt.args.includeColumns...))
 		})
 	}
 }
