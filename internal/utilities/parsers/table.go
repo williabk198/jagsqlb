@@ -13,7 +13,7 @@ func (tp tableParser) Parse(tableStr string) (intypes.Table, error) {
 	remainder := sanitizeInput(tableStr)
 	table, err := getTableData(&remainder)
 	if err != nil {
-		return intypes.Table{}, fmt.Errorf("failed to parse table data from %q: %w", tableStr, err)
+		return intypes.Table{}, fmt.Errorf("failed to parse table data in %q: %w", tableStr, err)
 	}
 
 	alias, remainder, err := getAlias(remainder)
