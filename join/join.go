@@ -14,9 +14,15 @@ const (
 )
 
 func On(condition inconds.Condition, additionalConds ...inconds.Condition) injoin.Relation {
-	panic("unimplemented")
+	return injoin.Relation{
+		Keyword:  "ON",
+		Relation: append([]inconds.Condition{condition}, additionalConds...),
+	}
 }
 
 func Using(columnName string) injoin.Relation {
-	panic("unimplemented")
+	return injoin.Relation{
+		Keyword:  "USING",
+		Relation: columnName,
+	}
 }
