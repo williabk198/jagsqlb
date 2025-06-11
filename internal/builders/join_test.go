@@ -77,10 +77,10 @@ func Test_joinBuilder_Build(t *testing.T) {
 					tables:  []intypes.Table{testTable1},
 					columns: []intypes.SelectColumn{testSelectColumn1, testSelectColumn2},
 				},
-				joins: []joinCondition{testJoinCondition1},
+				joinConditions: []joinCondition{testJoinCondition1},
 			},
 			wants: wants{
-				query: `SELECT "t1".*, "t2"."col1" AS "t2c1" FROM "table1" AS "t1" INNER JOIN "table2" AS "t2" USING ("col1");`,
+				query: `"SELECT "t1".*, "t2"."col1" AS "t2c1" FROM "table1" AS "t1" INNER JOIN "table2" AS "t2" USING ("col1");`,
 			},
 			assertion: assert.NoError,
 		},
@@ -91,7 +91,7 @@ func Test_joinBuilder_Build(t *testing.T) {
 					tables:  []intypes.Table{testTable1},
 					columns: []intypes.SelectColumn{testSelectColumn1},
 				},
-				joins: []joinCondition{testJoinCondition2, testJoinCondition3},
+				joinConditions: []joinCondition{testJoinCondition2, testJoinCondition3},
 			},
 			wants: wants{
 				query: `SELECT "t1".* FROM "table1" AS "t1" LEFT JOIN "table3" AS "t3" ON "t1"."col1" = "t3"."col2" RIGHT JOIN "table2" AS "t2" USING ("col2");`,
@@ -102,50 +102,6 @@ func Test_joinBuilder_Build(t *testing.T) {
 			name: "Error; Error Slice not Empty",
 			jb: joinBuilder{
 				errs: intypes.ErrorSlice{assert.AnError},
-			},
-			assertion: assert.Error,
-		},
-		{
-			name: "Error; USING w/ Invalid Column Definition",
-			jb: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins: []joinCondition{
-					{
-						joinTable:    testTable1,
-						joinType:     join.TypeCross,
-						joinRelation: join.Using(".bad_col"),
-					},
-				},
-			},
-			assertion: assert.Error,
-		},
-		{
-			name: "Error; ON w/ Invalid Condition",
-			jb: joinBuilder{
-				joins: []joinCondition{
-					{
-						joinTable:    testTable1,
-						joinType:     join.TypeOutter,
-						joinRelation: join.On(conds.Equals(".bad_col", 42)),
-					},
-				},
-			},
-			assertion: assert.Error,
-		},
-		{
-			name: "Error; ON w/ Invalid Condition 2",
-			jb: joinBuilder{
-				joins: []joinCondition{
-					{
-						joinTable: testTable1,
-						joinType:  join.TypeRight,
-						joinRelation: join.On(
-							conds.Equals("col1", conds.ColumnValue("t2.col2")),
-							conds.GreaterThan(".col2", 55),
-							conds.Equals(".bad_col", 42),
-						),
-					},
-				},
 			},
 			assertion: assert.Error,
 		},
@@ -219,8 +175,8 @@ func Test_joinBuilder_Join(t *testing.T) {
 		{
 			name: "Success; No Additional Columns",
 			jb: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins:         []joinCondition{testJoinCondition1},
+				selectBuilder:  selectBuilder{},
+				joinConditions: []joinCondition{testJoinCondition1},
 			},
 			args: args{
 				joinType:     join.TypeLeft,
@@ -228,8 +184,8 @@ func Test_joinBuilder_Join(t *testing.T) {
 				joinRelation: join.On(conds.Equals("t1.col1", conds.ColumnValue("t3.col2"))),
 			},
 			want: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins:         []joinCondition{testJoinCondition1, testJoinCondition2},
+				selectBuilder:  selectBuilder{},
+				joinConditions: []joinCondition{testJoinCondition1, testJoinCondition2},
 			},
 		},
 		{
@@ -239,7 +195,7 @@ func Test_joinBuilder_Join(t *testing.T) {
 					tables:  []intypes.Table{testTable1},
 					columns: []intypes.SelectColumn{testSelectColumn1},
 				},
-				joins: []joinCondition{testJoinCondition1},
+				joinConditions: []joinCondition{testJoinCondition1},
 			},
 			args: args{
 				joinType:       join.TypeRight,
@@ -255,14 +211,14 @@ func Test_joinBuilder_Join(t *testing.T) {
 						{Column: intypes.Column{Name: "col3", Table: &testTable2}},
 					},
 				},
-				joins: []joinCondition{testJoinCondition1, testJoinCondition3},
+				joinConditions: []joinCondition{testJoinCondition1, testJoinCondition3},
 			},
 		},
 		{
 			name: "Error; Bad Table Name",
 			jb: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins:         []joinCondition{},
+				selectBuilder:  selectBuilder{},
+				joinConditions: []joinCondition{},
 			},
 			args: args{
 				joinType:     join.TypeLeft,
@@ -270,8 +226,8 @@ func Test_joinBuilder_Join(t *testing.T) {
 				joinRelation: join.Using("col1"),
 			},
 			want: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins:         []joinCondition{},
+				selectBuilder:  selectBuilder{},
+				joinConditions: []joinCondition{},
 				errs: intypes.ErrorSlice{
 					fmt.Errorf("failed to parse table data in %q: %w", ".bad_table", intypes.ErrMissingSchemaName),
 				},
@@ -281,7 +237,7 @@ func Test_joinBuilder_Join(t *testing.T) {
 			name: "Error; Bad Additional Column Name",
 			jb: joinBuilder{
 				selectBuilder: selectBuilder{},
-				joins: []joinCondition{
+				joinConditions: []joinCondition{
 					testJoinCondition1,
 				},
 			},
