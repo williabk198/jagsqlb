@@ -273,7 +273,7 @@ func Test_joinBuilder_Join(t *testing.T) {
 				selectBuilder: selectBuilder{},
 				joins:         []joinCondition{},
 				errs: intypes.ErrorSlice{
-					fmt.Errorf("failed to parse table in JOIN clause: %w", fmt.Errorf("failed to parse table data from %q: %w", ".bad_table", intypes.ErrMissingSchemaName)),
+					fmt.Errorf("failed to parse table data in %q: %w", ".bad_table", intypes.ErrMissingSchemaName),
 				},
 			},
 		},
@@ -294,13 +294,9 @@ func Test_joinBuilder_Join(t *testing.T) {
 				},
 				includeColumns: []string{".bad_col"},
 			},
-			want: joinBuilder{
-				selectBuilder: selectBuilder{},
-				joins: []joinCondition{
-					testJoinCondition1,
-				},
+			want: selectBuilder{
 				errs: intypes.ErrorSlice{
-					fmt.Errorf("failed to parse column %q in %s of %s: %w", ".bad_col", join.TypeInner, "table2", fmt.Errorf("failed to parse table data provided in %q: %w", ".bad_col", intypes.ErrMissingTableName)),
+					fmt.Errorf("failed to parse table data in %q: %w", ".bad_column", intypes.ErrMissingTableName),
 				},
 			},
 		},

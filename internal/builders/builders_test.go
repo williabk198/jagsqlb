@@ -250,7 +250,7 @@ func Test_limitBuilder_Build(t *testing.T) {
 				limit:            25,
 			},
 			wants: wants{
-				query: `SELECT "col1" FROM "table1" LIMIT 25;`,
+				query: `SELECT "col1" FROM "table1" LIMIT 25`,
 			},
 			assertion: assert.NoError,
 		},
