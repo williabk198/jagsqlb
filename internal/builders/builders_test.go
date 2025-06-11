@@ -252,7 +252,6 @@ func Test_limitBuilder_Build(t *testing.T) {
 			wants: wants{
 				query: `SELECT "col1" FROM "table1" LIMIT 25`,
 			},
-			assertion: assert.NoError,
 		},
 	}
 	for _, tt := range tests {
