@@ -5,7 +5,6 @@ import (
 
 	"github.com/williabk198/jagsqlb/builders"
 	inconds "github.com/williabk198/jagsqlb/internal/conditions"
-	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	inutilities "github.com/williabk198/jagsqlb/internal/utilities"
 	"github.com/williabk198/jagsqlb/types"
@@ -59,10 +58,6 @@ func (s selectBuilder) Table(table string, columns ...string) builders.SelectBui
 	}
 
 	return s
-}
-
-func (s selectBuilder) Join(joinType injoin.Type, table string, joinRelation injoin.Relation, includeColumns ...string) builders.JoinBuilder {
-	panic("unimplemented")
 }
 
 func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
