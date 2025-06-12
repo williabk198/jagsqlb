@@ -25,7 +25,7 @@ func (s selectBuilder) Build() (query string, params []any, err error) {
 	var columnStr string
 	if len(s.tables) == 1 && len(s.columns) > 0 {
 		// If there is only one table defined, we don't need the table prefixes that you'd get by using
-		// `inutilities.JoinData`. So, just get the column names
+		// `inutilities.CoalesceSelectColumnsFullString`. So, just get the column names
 		columnStr = inutilities.CoalesceSelectColumnNamesString(s.columns)
 
 	} else if len(s.columns) > 0 {

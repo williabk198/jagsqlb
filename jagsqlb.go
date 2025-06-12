@@ -5,6 +5,7 @@ import (
 	inbuilders "github.com/williabk198/jagsqlb/internal/builders"
 )
 
+// SqlBuilder defines the operations of an SQL builder
 type SqlBuilder interface {
 	Select(table string, columns ...string) builders.SelectBuilder
 }
@@ -15,6 +16,7 @@ func (sb sqlBuilder) Select(table string, columns ...string) builders.SelectBuil
 	return inbuilders.NewSelectBuilder(table, columns...)
 }
 
+// NewSelectBuilder creates and returns a reusable SQL Builder
 func NewSqlBuilder() SqlBuilder {
 	return sqlBuilder{}
 }
