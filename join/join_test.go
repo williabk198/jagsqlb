@@ -4,19 +4,19 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	conds "github.com/williabk198/jagsqlb/conditions"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/condition"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 )
 
 func TestOn(t *testing.T) {
 	type args struct {
-		condition       inconds.Condition
-		additionalConds []inconds.Condition
+		condition       incondition.Condition
+		additionalConds []incondition.Condition
 	}
 
-	testJoinCond1 := conds.Equals("t1.col1", conds.ColumnValue("t2.col2"))
-	testJoinCond2 := conds.GreaterThan("t1.col2", 56)
+	testJoinCond1 := condition.Equals("t1.col1", condition.ColumnValue("t2.col2"))
+	testJoinCond2 := condition.GreaterThan("t1.col2", 56)
 
 	tests := []struct {
 		name string
@@ -30,18 +30,18 @@ func TestOn(t *testing.T) {
 			},
 			want: injoin.Relation{
 				Keyword:  "ON",
-				Relation: []inconds.Condition{testJoinCond1},
+				Relation: []incondition.Condition{testJoinCond1},
 			},
 		},
 		{
 			name: "Success; Multiple Conditions",
 			args: args{
 				condition:       testJoinCond1,
-				additionalConds: []inconds.Condition{testJoinCond2},
+				additionalConds: []incondition.Condition{testJoinCond2},
 			},
 			want: injoin.Relation{
 				Keyword:  "ON",
-				Relation: []inconds.Condition{testJoinCond1, testJoinCond2},
+				Relation: []incondition.Condition{testJoinCond1, testJoinCond2},
 			},
 		},
 	}

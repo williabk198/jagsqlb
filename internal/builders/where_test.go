@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
-	conds "github.com/williabk198/jagsqlb/conditions"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/condition"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	"github.com/williabk198/jagsqlb/types"
 )
 
@@ -27,8 +27,8 @@ func Test_whereBuilder_Build(t *testing.T) {
 			w: whereBuilder{
 				mainQuery: NewSelectBuilder("table1 AS t1", "col1", "col2"),
 				conditions: []whereCondition{
-					{condition: conds.Equals("col1", "test")},
-					{condition: conds.NotBetween("col2", 10, 23), conjunction: "OR"},
+					{condition: condition.Equals("col1", "test")},
+					{condition: condition.NotBetween("col2", 10, 23), conjunction: "OR"},
 				},
 			},
 			wants: wants{
@@ -42,7 +42,7 @@ func Test_whereBuilder_Build(t *testing.T) {
 			w: whereBuilder{
 				mainQuery: NewSelectBuilder("table1 AS t1").Table("table2 AS t2", "col1"),
 				conditions: []whereCondition{
-					{condition: conds.Equals("t1.col1", inconds.ColumnValue{ColumnName: "t2.col2"})},
+					{condition: condition.Equals("t1.col1", incondition.ColumnValue{ColumnName: "t2.col2"})},
 				},
 			},
 			wants: wants{
@@ -56,8 +56,8 @@ func Test_whereBuilder_Build(t *testing.T) {
 			w: whereBuilder{
 				mainQuery: NewSelectBuilder("table1", "*"),
 				conditions: []whereCondition{
-					{condition: conds.GroupedOr(conds.Equals("col1", "test"), conds.GreaterThanEqual("col2", 52))},
-					{condition: conds.GroupedOr(conds.NotIn("col3", []any{"test", "testing"}), conds.LessThan("col2", 52)), conjunction: "AND"},
+					{condition: condition.GroupedOr(condition.Equals("col1", "test"), condition.GreaterThanEqual("col2", 52))},
+					{condition: condition.GroupedOr(condition.NotIn("col3", []any{"test", "testing"}), condition.LessThan("col2", 52)), conjunction: "AND"},
 				},
 			},
 			wants: wants{
@@ -71,8 +71,8 @@ func Test_whereBuilder_Build(t *testing.T) {
 			w: whereBuilder{
 				mainQuery: NewSelectBuilder("table1", "*"),
 				conditions: []whereCondition{
-					{condition: conds.GroupedAnd(conds.Equals("col1", "test"), conds.GreaterThanEqual("col2", 52))},
-					{condition: conds.LessThan("col3", 128), conjunction: "OR"},
+					{condition: condition.GroupedAnd(condition.Equals("col1", "test"), condition.GreaterThanEqual("col2", 52))},
+					{condition: condition.LessThan("col3", 128), conjunction: "OR"},
 				},
 			},
 			wants: wants{
@@ -94,15 +94,15 @@ func Test_whereBuilder_Build(t *testing.T) {
 
 func Test_whereBuilder_And(t *testing.T) {
 	type args struct {
-		cond            inconds.Condition
-		additionalConds []inconds.Condition
+		cond            incondition.Condition
+		additionalConds []incondition.Condition
 	}
 
 	testWhereCond1 := whereCondition{
-		condition: conds.Equals("t1.col1", "testing"),
+		condition: condition.Equals("t1.col1", "testing"),
 	}
-	testCondInput1 := conds.LessThan("col2", 98.76)
-	testCondInput2 := conds.Between("col3", 17, 78)
+	testCondInput1 := condition.LessThan("col2", 98.76)
+	testCondInput2 := condition.Between("col3", 17, 78)
 
 	tests := []struct {
 		name string
@@ -132,7 +132,7 @@ func Test_whereBuilder_And(t *testing.T) {
 			},
 			args: args{
 				cond:            testCondInput1,
-				additionalConds: []inconds.Condition{testCondInput2},
+				additionalConds: []incondition.Condition{testCondInput2},
 			},
 			want: whereBuilder{
 				conditions: []whereCondition{
@@ -152,15 +152,15 @@ func Test_whereBuilder_And(t *testing.T) {
 
 func Test_whereBuilder_Or(t *testing.T) {
 	type args struct {
-		cond            inconds.Condition
-		additionalConds []inconds.Condition
+		cond            incondition.Condition
+		additionalConds []incondition.Condition
 	}
 
 	testWhereCond1 := whereCondition{
-		condition: conds.Equals("t1.col1", "testing"),
+		condition: condition.Equals("t1.col1", "testing"),
 	}
-	testCondInput1 := conds.LessThan("col2", 98.76)
-	testCondInput2 := conds.Between("col3", 17, 78)
+	testCondInput1 := condition.LessThan("col2", 98.76)
+	testCondInput2 := condition.Between("col3", 17, 78)
 
 	tests := []struct {
 		name string
@@ -190,7 +190,7 @@ func Test_whereBuilder_Or(t *testing.T) {
 			},
 			args: args{
 				cond:            testCondInput1,
-				additionalConds: []inconds.Condition{testCondInput2},
+				additionalConds: []incondition.Condition{testCondInput2},
 			},
 			want: whereBuilder{
 				conditions: []whereCondition{

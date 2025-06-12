@@ -1,4 +1,4 @@
-package inconds
+package incondition
 
 import (
 	"fmt"

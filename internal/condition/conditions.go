@@ -1,4 +1,4 @@
-package inconds
+package incondition
 
 import "github.com/williabk198/jagsqlb/internal/utilities/parsers"
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
-	conds "github.com/williabk198/jagsqlb/conditions"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/condition"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	"github.com/williabk198/jagsqlb/join"
@@ -307,7 +307,7 @@ func Test_selectBuilder_Join(t *testing.T) {
 			args: args{
 				joinType:       join.TypeInner,
 				table:          "table2 AS t2",
-				joinRelation:   join.On(conds.Equals("t1.col1", conds.ColumnValue("t2.col2"))),
+				joinRelation:   join.On(condition.Equals("t1.col1", condition.ColumnValue("t2.col2"))),
 				includeColumns: []string{"col3"},
 			},
 			want: joinBuilder{
@@ -321,8 +321,8 @@ func Test_selectBuilder_Join(t *testing.T) {
 						joinType:  join.TypeInner,
 						joinRelation: injoin.Relation{
 							Keyword: "ON",
-							Relation: []inconds.Condition{
-								conds.Equals("t1.col1", conds.ColumnValue("t2.col2")),
+							Relation: []incondition.Condition{
+								condition.Equals("t1.col1", condition.ColumnValue("t2.col2")),
 							},
 						},
 					},
@@ -339,8 +339,8 @@ func Test_selectBuilder_Join(t *testing.T) {
 
 func Test_selectBuilder_Where(t *testing.T) {
 	type args struct {
-		cond            inconds.Condition
-		additionalConds []inconds.Condition
+		cond            incondition.Condition
+		additionalConds []incondition.Condition
 	}
 	testTable1 := intypes.Table{Name: "table1"}
 	testSelectCol1 := intypes.SelectColumn{Column: intypes.Column{Table: &testTable1, Name: "col1"}}
@@ -348,9 +348,9 @@ func Test_selectBuilder_Where(t *testing.T) {
 		tables:  []intypes.Table{testTable1},
 		columns: []intypes.SelectColumn{testSelectCol1},
 	}
-	cond1 := conds.Equals("col1", "testing")
-	cond2 := conds.Between("col2", 42, 56)
-	cond3 := conds.GreaterThan("col3", 98.76)
+	cond1 := condition.Equals("col1", "testing")
+	cond2 := condition.Between("col2", 42, 56)
+	cond3 := condition.GreaterThan("col3", 98.76)
 
 	tests := []struct {
 		name string
@@ -378,7 +378,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 			s:    testSelectBuilder,
 			args: args{
 				cond:            cond1,
-				additionalConds: []inconds.Condition{cond2, cond3},
+				additionalConds: []incondition.Condition{cond2, cond3},
 			},
 			want: whereBuilder{
 				mainQuery: testSelectBuilder,

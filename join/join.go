@@ -1,7 +1,7 @@
 package join
 
 import (
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 )
 
@@ -13,10 +13,10 @@ const (
 	TypeCross injoin.Type = "CROSS JOIN"
 )
 
-func On(condition inconds.Condition, additionalConds ...inconds.Condition) injoin.Relation {
+func On(condition incondition.Condition, additionalConds ...incondition.Condition) injoin.Relation {
 	return injoin.Relation{
 		Keyword:  "ON",
-		Relation: append([]inconds.Condition{condition}, additionalConds...),
+		Relation: append([]incondition.Condition{condition}, additionalConds...),
 	}
 }
 

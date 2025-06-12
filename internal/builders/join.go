@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/williabk198/jagsqlb/builders"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	inutilities "github.com/williabk198/jagsqlb/internal/utilities"
@@ -62,7 +62,7 @@ func (jb joinBuilder) Build() (query string, queryParams []any, err error) {
 			continue
 		}
 
-		if conditions, ok := joinCond.joinRelation.Relation.([]inconds.Condition); ok && joinCond.joinRelation.Keyword == "ON" {
+		if conditions, ok := joinCond.joinRelation.Relation.([]incondition.Condition); ok && joinCond.joinRelation.Keyword == "ON" {
 			condStr, condParams, err := conditions[0].Parameterize()
 			if err != nil {
 				return "", nil, fmt.Errorf("failed to parameterize ON condition for %q: %w", joinCond.joinType, err)
@@ -115,7 +115,7 @@ func (jb joinBuilder) Join(joinType injoin.Type, table string, joinRelation injo
 	return jb
 }
 
-func (jb joinBuilder) Where(condition inconds.Condition, moreConditions ...inconds.Condition) builders.WhereBuilder {
+func (jb joinBuilder) Where(condition incondition.Condition, moreConditions ...incondition.Condition) builders.WhereBuilder {
 	var wb builders.WhereBuilder = whereBuilder{
 		mainQuery: jb,
 		conditions: []whereCondition{

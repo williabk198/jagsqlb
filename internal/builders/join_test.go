@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
-	conds "github.com/williabk198/jagsqlb/conditions"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	"github.com/williabk198/jagsqlb/condition"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	"github.com/williabk198/jagsqlb/join"
@@ -50,8 +50,8 @@ func Test_joinBuilder_Build(t *testing.T) {
 		joinType:  join.TypeLeft,
 		joinRelation: injoin.Relation{
 			Keyword: "ON",
-			Relation: []inconds.Condition{
-				conds.Equals("t1.col1", conds.ColumnValue("t3.col2")),
+			Relation: []incondition.Condition{
+				condition.Equals("t1.col1", condition.ColumnValue("t3.col2")),
 			},
 		},
 	}
@@ -126,7 +126,7 @@ func Test_joinBuilder_Build(t *testing.T) {
 					{
 						joinTable:    testTable1,
 						joinType:     join.TypeOuter,
-						joinRelation: join.On(conds.Equals(".bad_col", 42)),
+						joinRelation: join.On(condition.Equals(".bad_col", 42)),
 					},
 				},
 			},
@@ -140,9 +140,9 @@ func Test_joinBuilder_Build(t *testing.T) {
 						joinTable: testTable1,
 						joinType:  join.TypeRight,
 						joinRelation: join.On(
-							conds.Equals("col1", conds.ColumnValue("t2.col2")),
-							conds.GreaterThan(".col2", 55),
-							conds.Equals(".bad_col", 42),
+							condition.Equals("col1", condition.ColumnValue("t2.col2")),
+							condition.GreaterThan(".col2", 55),
+							condition.Equals(".bad_col", 42),
 						),
 					},
 				},
@@ -196,8 +196,8 @@ func Test_joinBuilder_Join(t *testing.T) {
 		joinType:  join.TypeLeft,
 		joinRelation: injoin.Relation{
 			Keyword: "ON",
-			Relation: []inconds.Condition{
-				conds.Equals("t1.col1", conds.ColumnValue("t3.col2")),
+			Relation: []incondition.Condition{
+				condition.Equals("t1.col1", condition.ColumnValue("t3.col2")),
 			},
 		},
 	}
@@ -225,7 +225,7 @@ func Test_joinBuilder_Join(t *testing.T) {
 			args: args{
 				joinType:     join.TypeLeft,
 				table:        "table3 AS t3",
-				joinRelation: join.On(conds.Equals("t1.col1", conds.ColumnValue("t3.col2"))),
+				joinRelation: join.On(condition.Equals("t1.col1", condition.ColumnValue("t3.col2"))),
 			},
 			want: joinBuilder{
 				selectBuilder: selectBuilder{},
@@ -314,8 +314,8 @@ func Test_joinBuilder_Join(t *testing.T) {
 
 func Test_joinBuilder_Where(t *testing.T) {
 	type args struct {
-		condition      inconds.Condition
-		moreConditions []inconds.Condition
+		condition      incondition.Condition
+		moreConditions []incondition.Condition
 	}
 	tests := []struct {
 		name string
@@ -327,12 +327,12 @@ func Test_joinBuilder_Where(t *testing.T) {
 			name: "Success",
 			jb:   joinBuilder{},
 			args: args{
-				condition: conds.GreaterThanEqual("t2.col3", 59),
+				condition: condition.GreaterThanEqual("t2.col3", 59),
 			},
 			want: whereBuilder{
 				mainQuery: joinBuilder{},
 				conditions: []whereCondition{
-					{condition: conds.GreaterThanEqual("t2.col3", 59)},
+					{condition: condition.GreaterThanEqual("t2.col3", 59)},
 				},
 			},
 		},

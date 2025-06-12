@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/williabk198/jagsqlb/builders"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	injoin "github.com/williabk198/jagsqlb/internal/join"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 	inutilities "github.com/williabk198/jagsqlb/internal/utilities"
@@ -68,7 +68,7 @@ func (s selectBuilder) Join(joinType injoin.Type, table string, joinRelation inj
 	return jb.Join(joinType, table, joinRelation, includeColumns...)
 }
 
-func (s selectBuilder) Where(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
+func (s selectBuilder) Where(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
 	var wb builders.WhereBuilder = whereBuilder{
 		mainQuery: s,
 		conditions: []whereCondition{

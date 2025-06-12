@@ -1,10 +1,10 @@
-package conds
+package condition
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 )
 
 func TestColumnValue(t *testing.T) {
@@ -14,14 +14,14 @@ func TestColumnValue(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.ColumnValue
+		want incondition.ColumnValue
 	}{
 		{
 			name: "Success",
 			args: args{
 				columnName: "testColumn",
 			},
-			want: inconds.ColumnValue{
+			want: incondition.ColumnValue{
 				ColumnName: "testColumn",
 			},
 		},
@@ -41,7 +41,7 @@ func TestEquals(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -49,7 +49,7 @@ func TestEquals(t *testing.T) {
 				columnName: "col1",
 				value:      "testing",
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "=",
 				Values:     []any{"testing"},
@@ -71,7 +71,7 @@ func TestNotEquals(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -79,7 +79,7 @@ func TestNotEquals(t *testing.T) {
 				columnName: "col1",
 				value:      "testing",
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "!=",
 				Values:     []any{"testing"},
@@ -101,7 +101,7 @@ func TestGraterThan(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -109,7 +109,7 @@ func TestGraterThan(t *testing.T) {
 				columnName: "col1",
 				value:      42,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   ">",
 				Values:     []any{42},
@@ -131,7 +131,7 @@ func TestGreaterThanEqual(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -139,7 +139,7 @@ func TestGreaterThanEqual(t *testing.T) {
 				columnName: "col1",
 				value:      42,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   ">=",
 				Values:     []any{42},
@@ -161,7 +161,7 @@ func TestLessThan(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -169,7 +169,7 @@ func TestLessThan(t *testing.T) {
 				columnName: "col1",
 				value:      42,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "<",
 				Values:     []any{42},
@@ -191,7 +191,7 @@ func TestLessThanEqual(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -199,7 +199,7 @@ func TestLessThanEqual(t *testing.T) {
 				columnName: "col1",
 				value:      42,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "<=",
 				Values:     []any{42},
@@ -221,7 +221,7 @@ func TestIn(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -229,7 +229,7 @@ func TestIn(t *testing.T) {
 				columnName: "col1",
 				value:      []any{42, 56, 127},
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "IN",
 				Values:     []any{42, 56, 127},
@@ -251,7 +251,7 @@ func TestNotIn(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -259,7 +259,7 @@ func TestNotIn(t *testing.T) {
 				columnName: "col1",
 				value:      []any{42, 56, 127},
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "NOT IN",
 				Values:     []any{42, 56, 127},
@@ -282,7 +282,7 @@ func TestBetween(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -291,7 +291,7 @@ func TestBetween(t *testing.T) {
 				val1:       42,
 				val2:       56,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "BETWEEN",
 				Values:     []any{42, 56},
@@ -314,7 +314,7 @@ func TestNotBetween(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success",
@@ -323,7 +323,7 @@ func TestNotBetween(t *testing.T) {
 				val1:       42,
 				val2:       56,
 			},
-			want: inconds.SimpleCondition{
+			want: incondition.SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "NOT BETWEEN",
 				Values:     []any{42, 56},
@@ -339,9 +339,9 @@ func TestNotBetween(t *testing.T) {
 
 func TestGroupedAnd(t *testing.T) {
 	type args struct {
-		cond1           inconds.Condition
-		cond2           inconds.Condition
-		additionalConds []inconds.Condition
+		cond1           incondition.Condition
+		cond2           incondition.Condition
+		additionalConds []incondition.Condition
 	}
 
 	testCond1 := LessThanEqual("t1.col1", 42)
@@ -351,7 +351,7 @@ func TestGroupedAnd(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success; Minimal",
@@ -359,9 +359,9 @@ func TestGroupedAnd(t *testing.T) {
 				cond1: testCond1,
 				cond2: testCond2,
 			},
-			want: inconds.GroupedConditions{
+			want: incondition.GroupedConditions{
 				Conjunction: "AND",
-				Conditions:  []inconds.Condition{testCond1, testCond2},
+				Conditions:  []incondition.Condition{testCond1, testCond2},
 			},
 		},
 		{
@@ -369,11 +369,11 @@ func TestGroupedAnd(t *testing.T) {
 			args: args{
 				cond1:           testCond1,
 				cond2:           testCond2,
-				additionalConds: []inconds.Condition{testCond3},
+				additionalConds: []incondition.Condition{testCond3},
 			},
-			want: inconds.GroupedConditions{
+			want: incondition.GroupedConditions{
 				Conjunction: "AND",
-				Conditions:  []inconds.Condition{testCond1, testCond2, testCond3},
+				Conditions:  []incondition.Condition{testCond1, testCond2, testCond3},
 			},
 		},
 	}
@@ -386,9 +386,9 @@ func TestGroupedAnd(t *testing.T) {
 
 func TestGroupedOr(t *testing.T) {
 	type args struct {
-		cond1           inconds.Condition
-		cond2           inconds.Condition
-		additionalConds []inconds.Condition
+		cond1           incondition.Condition
+		cond2           incondition.Condition
+		additionalConds []incondition.Condition
 	}
 
 	testCond1 := LessThanEqual("t1.col1", 42)
@@ -398,7 +398,7 @@ func TestGroupedOr(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want inconds.Condition
+		want incondition.Condition
 	}{
 		{
 			name: "Success; Minimal",
@@ -406,9 +406,9 @@ func TestGroupedOr(t *testing.T) {
 				cond1: testCond1,
 				cond2: testCond2,
 			},
-			want: inconds.GroupedConditions{
+			want: incondition.GroupedConditions{
 				Conjunction: "OR",
-				Conditions:  []inconds.Condition{testCond1, testCond2},
+				Conditions:  []incondition.Condition{testCond1, testCond2},
 			},
 		},
 		{
@@ -416,11 +416,11 @@ func TestGroupedOr(t *testing.T) {
 			args: args{
 				cond1:           testCond1,
 				cond2:           testCond2,
-				additionalConds: []inconds.Condition{testCond3},
+				additionalConds: []incondition.Condition{testCond3},
 			},
-			want: inconds.GroupedConditions{
+			want: incondition.GroupedConditions{
 				Conjunction: "OR",
-				Conditions:  []inconds.Condition{testCond1, testCond2, testCond3},
+				Conditions:  []incondition.Condition{testCond1, testCond2, testCond3},
 			},
 		},
 	}

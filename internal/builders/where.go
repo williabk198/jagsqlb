@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/williabk198/jagsqlb/builders"
-	inconds "github.com/williabk198/jagsqlb/internal/conditions"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	"github.com/williabk198/jagsqlb/types"
 )
 
@@ -43,7 +43,7 @@ func (w whereBuilder) Build() (query string, queryParams []any, err error) {
 	return finalizeQuery(sb.String()), params, nil
 }
 
-func (w whereBuilder) And(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
+func (w whereBuilder) And(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
 
 	w.conditions = append(w.conditions, whereCondition{
 		conjunction: "AND",
@@ -60,7 +60,7 @@ func (w whereBuilder) And(cond inconds.Condition, additionalConds ...inconds.Con
 	return w
 }
 
-func (w whereBuilder) Or(cond inconds.Condition, additionalConds ...inconds.Condition) builders.WhereBuilder {
+func (w whereBuilder) Or(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
 	w.conditions = append(w.conditions, whereCondition{
 		conjunction: "OR",
 		condition:   cond,
@@ -78,7 +78,7 @@ func (w whereBuilder) Or(cond inconds.Condition, additionalConds ...inconds.Cond
 
 type whereCondition struct {
 	conjunction string
-	condition   inconds.Condition
+	condition   incondition.Condition
 }
 
 // Limit implements builders.WhereBuilder.
