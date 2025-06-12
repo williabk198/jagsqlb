@@ -111,6 +111,30 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; Is Null",
+			sc: SimpleCondition{
+				ColumnName: "col1",
+				Operator:   "IS",
+				Values:     []any{"NULL"},
+			},
+			wants: wants{
+				query: `"col1" IS NULL`,
+			},
+			assertion: assert.NoError,
+		},
+		{
+			name: "Success; Is Not Null",
+			sc: SimpleCondition{
+				ColumnName: "col1",
+				Operator:   "IS NOT",
+				Values:     []any{"NULL"},
+			},
+			wants: wants{
+				query: `"col1" IS NOT NULL`,
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Success; In",
 			sc: SimpleCondition{
 				ColumnName: "col1",
@@ -124,7 +148,7 @@ func TestSimpleCondition_Parameterize(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
-			name: "Success; In",
+			name: "Success; Not In",
 			sc: SimpleCondition{
 				ColumnName: "col1",
 				Operator:   "NOT IN",

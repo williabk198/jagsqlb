@@ -17,6 +17,12 @@ func (sc SimpleCondition) Parameterize() (string, []any, error) {
 		return "", nil, fmt.Errorf("failed to parse column data: %w", err)
 	}
 
+	// Check to see if the is an IS or IS NOT condition.
+	if strings.HasPrefix(sc.Operator, "IS") {
+		// If it is, then don't parameterize the value since it will always be "NULL"
+		return fmt.Sprintf("%s %s %s", column, sc.Operator, sc.Values[0]), nil, nil
+	}
+
 	// TODO?: Move to its own function??
 	if strings.HasSuffix(sc.Operator, "BETWEEN") {
 		sb := new(strings.Builder)

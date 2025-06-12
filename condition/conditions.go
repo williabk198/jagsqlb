@@ -58,6 +58,22 @@ func LessThanEqual(columnName string, value any) incondition.Condition {
 	}
 }
 
+func IsNull(columnName string) incondition.Condition {
+	return incondition.SimpleCondition{
+		ColumnName: columnName,
+		Operator:   "IS",
+		Values:     []any{"NULL"},
+	}
+}
+
+func IsNotNull(columnName string) incondition.Condition {
+	return incondition.SimpleCondition{
+		ColumnName: columnName,
+		Operator:   "IS NOT",
+		Values:     []any{"NULL"},
+	}
+}
+
 func In(columnName string, value []any) incondition.Condition {
 	return incondition.SimpleCondition{
 		ColumnName: columnName,
