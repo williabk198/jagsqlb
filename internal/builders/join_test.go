@@ -321,7 +321,7 @@ func Test_joinBuilder_Where(t *testing.T) {
 		name string
 		jb   joinBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Success",

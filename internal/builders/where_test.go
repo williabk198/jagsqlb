@@ -108,7 +108,7 @@ func Test_whereBuilder_And(t *testing.T) {
 		name string
 		w    whereBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Single Condition",
@@ -166,7 +166,7 @@ func Test_whereBuilder_Or(t *testing.T) {
 		name string
 		w    whereBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Single Condition",

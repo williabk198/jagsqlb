@@ -356,7 +356,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 		name string
 		s    selectBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Success; Minimal",

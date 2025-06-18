@@ -43,7 +43,7 @@ func (w whereBuilder) Build() (query string, queryParams []any, err error) {
 	return finalizeQuery(sb.String()), params, nil
 }
 
-func (w whereBuilder) And(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
+func (w whereBuilder) And(cond incondition.Condition, additionalConds ...incondition.Condition) builders.SelectWhereBuilder {
 
 	w.conditions = append(w.conditions, whereCondition{
 		conjunction: "AND",
@@ -60,7 +60,7 @@ func (w whereBuilder) And(cond incondition.Condition, additionalConds ...incondi
 	return w
 }
 
-func (w whereBuilder) Or(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
+func (w whereBuilder) Or(cond incondition.Condition, additionalConds ...incondition.Condition) builders.SelectWhereBuilder {
 	w.conditions = append(w.conditions, whereCondition{
 		conjunction: "OR",
 		condition:   cond,
