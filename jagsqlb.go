@@ -7,10 +7,15 @@ import (
 
 // SqlBuilder defines the operations of an SQL builder
 type SqlBuilder interface {
+	Delete(table string) builders.DeleteBuilder
 	Select(table string, columns ...string) builders.SelectBuilder
 }
 
 type sqlBuilder struct{}
+
+func (sb sqlBuilder) Delete(table string) builders.DeleteBuilder {
+	return inbuilders.NewDeleteBuilder(table)
+}
 
 func (sb sqlBuilder) Select(table string, columns ...string) builders.SelectBuilder {
 	return inbuilders.NewSelectBuilder(table, columns...)

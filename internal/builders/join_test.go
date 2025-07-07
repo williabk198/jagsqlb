@@ -321,7 +321,7 @@ func Test_joinBuilder_Where(t *testing.T) {
 		name string
 		jb   joinBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Success",
@@ -329,7 +329,7 @@ func Test_joinBuilder_Where(t *testing.T) {
 			args: args{
 				condition: condition.GreaterThanEqual("t2.col3", 59),
 			},
-			want: whereBuilder{
+			want: selectWhereBuilder{
 				mainQuery: joinBuilder{},
 				conditions: []whereCondition{
 					{condition: condition.GreaterThanEqual("t2.col3", 59)},

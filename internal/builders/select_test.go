@@ -356,7 +356,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 		name string
 		s    selectBuilder
 		args args
-		want builders.WhereBuilder
+		want builders.SelectWhereBuilder
 	}{
 		{
 			name: "Success; Minimal",
@@ -364,7 +364,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 			args: args{
 				cond: cond1,
 			},
-			want: whereBuilder{
+			want: selectWhereBuilder{
 				mainQuery: testSelectBuilder,
 				conditions: []whereCondition{
 					{
@@ -380,7 +380,7 @@ func Test_selectBuilder_Where(t *testing.T) {
 				cond:            cond1,
 				additionalConds: []incondition.Condition{cond2, cond3},
 			},
-			want: whereBuilder{
+			want: selectWhereBuilder{
 				mainQuery: testSelectBuilder,
 				conditions: []whereCondition{
 					{condition: cond1},
