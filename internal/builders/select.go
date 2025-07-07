@@ -68,8 +68,8 @@ func (s selectBuilder) Join(joinType injoin.Type, table string, joinRelation inj
 	return jb.Join(joinType, table, joinRelation, includeColumns...)
 }
 
-func (s selectBuilder) Where(cond incondition.Condition, additionalConds ...incondition.Condition) builders.WhereBuilder {
-	var wb builders.WhereBuilder = whereBuilder{
+func (s selectBuilder) Where(cond incondition.Condition, additionalConds ...incondition.Condition) builders.SelectWhereBuilder {
+	var wb builders.SelectWhereBuilder = selectWhereBuilder{
 		mainQuery: s,
 		conditions: []whereCondition{
 			{condition: cond},
