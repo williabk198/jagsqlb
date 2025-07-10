@@ -3,7 +3,6 @@ package inbuilders
 import (
 	"fmt"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
@@ -43,12 +42,12 @@ func Test_insertBuilder_Build(t *testing.T) {
 				table:   intypes.Table{Name: "table1"},
 				columns: []intypes.Column{},
 				values: [][]any{
-					{"test", 13, true, time.Unix(0, 0)},
+					{"test", 13, true, 1.23},
 				},
 			},
 			wants: wants{
 				query:  `INSERT INTO "table1" VALUES ($1, $2, $3, $4);`,
-				params: []any{"test", 13, true, time.Unix(0, 0)},
+				params: []any{"test", 13, true, 1.23},
 			},
 			assertion: assert.NoError,
 		},
@@ -74,13 +73,13 @@ func Test_insertBuilder_Build(t *testing.T) {
 				table:   intypes.Table{Name: "table1"},
 				columns: []intypes.Column{},
 				values: [][]any{
-					{"test", 13, true, time.Unix(0, 0)},
-					{"more_testing", 97, false, time.Unix(86400, 0)},
+					{"test", 13, true, 1.23},
+					{"more_testing", 97, false, 4.56},
 				},
 			},
 			wants: wants{
 				query:  `INSERT INTO "table1" VALUES ($1, $2, $3, $4) ($5, $6, $7, $8);`,
-				params: []any{"test", 13, true, time.Unix(0, 0), "more_testing", 97, false, time.Unix(86400, 0)},
+				params: []any{"test", 13, true, 1.23, "more_testing", 97, false, 4.56},
 			},
 			assertion: assert.NoError,
 		},
@@ -133,14 +132,14 @@ func Test_insertBuilder_Values(t *testing.T) {
 			name: "Success; Single Value Slice",
 			ib:   testInsertBuilder,
 			args: args{
-				vals: []any{"something", 17, time.Unix(0, 0)},
+				vals: []any{"something", 17, 1.23},
 			},
 			want: returningBuilder{
 				prevBuilder: insertBuilder{
 					table:   intypes.Table{Name: "table1"},
 					columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}, {Name: "ts"}},
 					values: [][]any{
-						{"something", 17, time.Unix(0, 0)},
+						{"something", 17, 1.23},
 					},
 				},
 			},
@@ -149,9 +148,9 @@ func Test_insertBuilder_Values(t *testing.T) {
 			name: "Success; Multiple Value Slices",
 			ib:   testInsertBuilder,
 			args: args{
-				vals: []any{"something", 17, time.Unix(0, 0)},
+				vals: []any{"something", 17, 1.23},
 				moreVals: [][]any{
-					{"something_else", 7, time.Unix(86400, 0)},
+					{"something_else", 7, 4.56},
 				},
 			},
 			want: returningBuilder{
@@ -159,8 +158,8 @@ func Test_insertBuilder_Values(t *testing.T) {
 					table:   intypes.Table{Name: "table1"},
 					columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}, {Name: "ts"}},
 					values: [][]any{
-						{"something", 17, time.Unix(0, 0)},
-						{"something_else", 7, time.Unix(86400, 0)},
+						{"something", 17, 1.23},
+						{"something_else", 7, 4.56},
 					},
 				},
 			},
