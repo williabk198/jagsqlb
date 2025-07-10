@@ -17,6 +17,10 @@ func (sb sqlBuilder) Delete(table string) builders.DeleteBuilder {
 	return inbuilders.NewDeleteBuilder(table)
 }
 
+func (sb sqlBuilder) Insert(table string) builders.InsertBuilder {
+	panic("unimplemented")
+}
+
 func (sb sqlBuilder) Select(table string, columns ...string) builders.SelectBuilder {
 	return inbuilders.NewSelectBuilder(table, columns...)
 }

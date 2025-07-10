@@ -16,6 +16,18 @@ type DeleteBuilder interface {
 	Where(condition incondition.Condition, moreConditions ...incondition.Condition) ReturningWhereBuilder
 }
 
+type InsertBuilder interface {
+	Builder
+	InsertValueBuilder
+	Columns(column string, moreColumns ...string) InsertValueBuilder
+	DefaultValues() ReturningBuilder
+	Data(data any, moreData ...any) ReturningBuilder
+}
+
+type InsertValueBuilder interface {
+	Values(vals []any, moreVals ...[]any) ReturningBuilder
+}
+
 type SelectBuilder interface {
 	OrderByPaginationBuilders
 	Table(table string, columns ...string) SelectBuilder
