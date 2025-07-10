@@ -10,10 +10,15 @@ func TestColumnTagParser(t *testing.T) {
 	type args struct {
 		input any
 	}
+	type wants struct {
+		cols []string
+		vals []any
+	}
+
 	tests := []struct {
 		name      string
 		args      args
-		want      map[string]any
+		wants     wants
 		assertion assert.ErrorAssertionFunc
 	}{
 		{
@@ -21,7 +26,10 @@ func TestColumnTagParser(t *testing.T) {
 			args: args{
 				input: struct{ Data string }{"testing"},
 			},
-			want:      map[string]any{"Data": "testing"},
+			wants: wants{
+				cols: []string{"Data"},
+				vals: []any{"testing"},
+			},
 			assertion: assert.NoError,
 		},
 		{
@@ -31,8 +39,9 @@ func TestColumnTagParser(t *testing.T) {
 					Data int `jagsqlb:"data"`
 				}{52},
 			},
-			want: map[string]any{
-				"data": 52,
+			wants: wants{
+				cols: []string{"data"},
+				vals: []any{52},
 			},
 			assertion: assert.NoError,
 		},
@@ -46,9 +55,10 @@ func TestColumnTagParser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ColumnTagParser(tt.args.input)
+			gotCols, gotVals, err := ParseColumnTag(tt.args.input)
 			tt.assertion(t, err)
-			assert.Equal(t, tt.want, got)
+			assert.Equal(t, tt.wants.cols, gotCols)
+			assert.Equal(t, tt.wants.vals, gotVals)
 		})
 	}
 }
