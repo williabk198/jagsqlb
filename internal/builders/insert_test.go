@@ -375,6 +375,17 @@ func TestNewInsertBuilder(t *testing.T) {
 				table: intypes.Table{Name: "table1"},
 			},
 		},
+		{
+			name: "Error; Bad Table Name",
+			args: args{
+				table: ".bad_name",
+			},
+			want: insertBuilder{
+				errs: intypes.ErrorSlice{
+					fmt.Errorf("failed to parse table data from %q: %w", ".bad_name", intypes.ErrMissingSchemaName),
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
