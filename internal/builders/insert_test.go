@@ -164,6 +164,48 @@ func Test_insertBuilder_Values(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "Error; Incorrect Values Length",
+			ib: insertBuilder{
+				table:   intypes.Table{Name: "table1"},
+				columns: []intypes.Column{{Name: "col1"}},
+				values:  [][]any{},
+			},
+			args: args{
+				vals: []any{"testing", "too_many_vals"},
+			},
+			want: returningBuilder{
+				prevBuilder: insertBuilder{
+					table:   intypes.Table{Name: "table1"},
+					columns: []intypes.Column{{Name: "col1"}},
+					values:  [][]any{},
+					errs: intypes.ErrorSlice{
+						fmt.Errorf("1 column(s) provided but 2 value(s) were given(%v)", []any{"testing", "too_many_vals"}),
+					},
+				},
+			},
+		},
+		{
+			name: "Error; Incorrect MoreValues Length",
+			ib: insertBuilder{
+				table:   intypes.Table{Name: "table1"},
+				columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}},
+				values:  [][]any{},
+			},
+			args: args{
+				vals: []any{"testing"},
+			},
+			want: returningBuilder{
+				prevBuilder: insertBuilder{
+					table:   intypes.Table{Name: "table1"},
+					columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}},
+					values:  [][]any{},
+					errs: intypes.ErrorSlice{
+						fmt.Errorf("2 column(s) provided but 1 value(s) were given(%v)", []any{"testing"}),
+					},
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
