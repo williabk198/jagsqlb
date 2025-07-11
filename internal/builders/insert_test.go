@@ -253,6 +253,34 @@ func Test_insertBuilder_Columns(t *testing.T) {
 				columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}, {Name: "col3"}},
 			},
 		},
+		{
+			name: "Error; Bad Data in Column",
+			ib:   insertBuilder{table: intypes.Table{Name: "table1"}},
+			args: args{
+				column: ".bad_col",
+			},
+			want: insertBuilder{
+				table: intypes.Table{Name: "table1"},
+				errs: intypes.ErrorSlice{
+					fmt.Errorf("failed to parse table data provided in %q: %w", ".bad_col", intypes.ErrMissingTableName),
+				},
+			},
+		},
+		{
+			name: "Error; Bad Data in MoreColumn",
+			ib:   insertBuilder{table: intypes.Table{Name: "table1"}},
+			args: args{
+				column:      "col1",
+				moreColumns: []string{".bad_col"},
+			},
+			want: insertBuilder{
+				table:   intypes.Table{Name: "table1"},
+				columns: []intypes.Column{{Name: "col1"}},
+				errs: intypes.ErrorSlice{
+					fmt.Errorf("failed to parse table data provided in %q: %w", ".bad_col", intypes.ErrMissingTableName),
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
