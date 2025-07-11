@@ -193,13 +193,18 @@ func Test_insertBuilder_Values(t *testing.T) {
 				values:  [][]any{},
 			},
 			args: args{
-				vals: []any{"testing"},
+				vals: []any{"testing", 56},
+				moreVals: [][]any{
+					{"testing"},
+				},
 			},
 			want: returningBuilder{
 				prevBuilder: insertBuilder{
 					table:   intypes.Table{Name: "table1"},
 					columns: []intypes.Column{{Name: "col1"}, {Name: "col2"}},
-					values:  [][]any{},
+					values: [][]any{
+						{"testing", 56},
+					},
 					errs: intypes.ErrorSlice{
 						fmt.Errorf("2 column(s) provided but 1 value(s) were given(%v)", []any{"testing"}),
 					},
@@ -283,8 +288,8 @@ func Test_insertBuilder_DefaultValues(t *testing.T) {
 
 func Test_insertBuilder_Data(t *testing.T) {
 	type testData struct {
-		StrData  string `jagsqlb:"string_data"`
-		IntDeata int
+		StrData string `jagsqlb:"string_data"`
+		IntData int
 	}
 
 	type args struct {
@@ -352,8 +357,8 @@ func Test_insertBuilder_Data(t *testing.T) {
 					table:   intypes.Table{Name: "table1"},
 					columns: []intypes.Column{{Name: "string_data"}, {Name: "IntData"}},
 					values: [][]any{
-						{42},
-						{93},
+						{"test1", 42},
+						{"test2", 93},
 					},
 				},
 			},
@@ -370,7 +375,10 @@ func Test_insertBuilder_Data(t *testing.T) {
 				prevBuilder: insertBuilder{
 					table: intypes.Table{Name: "table1"},
 					errs: intypes.ErrorSlice{
-						fmt.Errorf("failed to process argument 0 data: recieved value is not a struct type"),
+						fmt.Errorf(
+							"failed to process argument 0 of Data function: %w",
+							fmt.Errorf("recieved value is not a struct type"),
+						),
 					},
 				},
 			},
@@ -385,7 +393,10 @@ func Test_insertBuilder_Data(t *testing.T) {
 			want: returningBuilder{
 				prevBuilder: insertBuilder{
 					errs: intypes.ErrorSlice{
-						fmt.Errorf("failed to process argument 1 data: recieved value is not a struct type"),
+						fmt.Errorf(
+							"failed to process argument 1 of Data function: %w",
+							fmt.Errorf("recieved value is not a struct type"),
+						),
 					},
 				},
 			},
