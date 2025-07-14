@@ -6,6 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/williabk198/jagsqlb/builders"
+	"github.com/williabk198/jagsqlb/condition"
+	incondition "github.com/williabk198/jagsqlb/internal/condition"
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
@@ -238,6 +240,49 @@ func Test_updateBuilder_From(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Equal(t, tt.want, tt.u.From(tt.args.table, tt.args.moreTables...))
+		})
+	}
+}
+
+func Test_updateBuilder_Where(t *testing.T) {
+	type args struct {
+		cond      incondition.Condition
+		moreConds []incondition.Condition
+	}
+	tests := []struct {
+		name string
+		u    updateBuilder
+		args args
+		want builders.ReturningWhereBuilder
+	}{
+		{
+			name: "Success",
+			u: updateBuilder{
+				table:   intypes.Table{Name: "table1"},
+				columns: []intypes.Column{{Name: "col1"}},
+				vals:    []any{"test"},
+			},
+			args: args{
+				cond: condition.Equals("col2", 56),
+			},
+			want: returningWhereBuilder{
+				mainQuery: updateBuilder{
+					table:   intypes.Table{Name: "table1"},
+					columns: []intypes.Column{{Name: "col1"}},
+					vals:    []any{"test"},
+				},
+				conditions: whereConditions{
+					{
+						conjunction: "AND",
+						condition:   condition.Equals("col2", 56),
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, tt.u.Where(tt.args.cond, tt.args.moreConds...))
 		})
 	}
 }
