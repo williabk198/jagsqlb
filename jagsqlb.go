@@ -8,6 +8,7 @@ import (
 // SqlBuilder defines the operations of an SQL builder
 type SqlBuilder interface {
 	Delete(table string) builders.DeleteBuilder
+	Insert(table string) builders.InsertBuilder
 	Select(table string, columns ...string) builders.SelectBuilder
 	Update(table string) builders.UpdateBuilder
 }
