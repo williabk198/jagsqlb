@@ -9,6 +9,7 @@ import (
 type SqlBuilder interface {
 	Delete(table string) builders.DeleteBuilder
 	Select(table string, columns ...string) builders.SelectBuilder
+	Update(table string) builders.UpdateBuilder
 }
 
 type sqlBuilder struct{}
@@ -23,6 +24,10 @@ func (sb sqlBuilder) Insert(table string) builders.InsertBuilder {
 
 func (sb sqlBuilder) Select(table string, columns ...string) builders.SelectBuilder {
 	return inbuilders.NewSelectBuilder(table, columns...)
+}
+
+func (sb sqlBuilder) Update(table string) builders.UpdateBuilder {
+	return inbuilders.NewUpdateBuilder(table)
 }
 
 // NewSelectBuilder creates and returns a reusable SQL Builder
