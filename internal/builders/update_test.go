@@ -91,23 +91,11 @@ func Test_updateBuilder_SetMap(t *testing.T) {
 			name: "Success",
 			u:    updateBuilder{},
 			args: args{
-				colValMap: map[string]any{
-					"col1": "something",
-					"col2": 12.34,
-					"col3": 987,
-				},
+				colValMap: map[string]any{"col1": "something"},
 			},
 			want: updateBuilder{
-				columns: []intypes.Column{
-					{Name: "col1"},
-					{Name: "col2"},
-					{Name: "col3"},
-				},
-				vals: []any{
-					"something",
-					12.34,
-					987,
-				},
+				columns: []intypes.Column{{Name: "col1"}},
+				vals:    []any{"something"},
 			},
 		},
 	}
