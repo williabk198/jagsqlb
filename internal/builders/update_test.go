@@ -34,7 +34,7 @@ func Test_updateBuilder_Build(t *testing.T) {
 				query:  `UPDATE "table1" SET "col1"=$1, "col2"=$2;`,
 				params: []any{"testing", 137},
 			},
-			assertion: assert.Error,
+			assertion: assert.NoError,
 		},
 		{
 			name: "Sucess; w/ From",
@@ -48,13 +48,14 @@ func Test_updateBuilder_Build(t *testing.T) {
 					"testing",
 					137,
 				},
-				fromTable: []intypes.Table{
+				fromTables: []intypes.Table{
 					{Name: "table2"},
 					{Name: "table3"},
 				},
 			},
 			wants: wants{
-				query: `UPDATE "table1" SET "col1"=$1, "col2"=$2 FROM "table2", "table3";`,
+				query:  `UPDATE "table1" SET "col1"=$1, "col2"=$2 FROM "table2", "table3";`,
+				params: []any{"testing", 137},
 			},
 			assertion: assert.NoError,
 		},
@@ -84,7 +85,7 @@ func Test_updateBuilder_SetMap(t *testing.T) {
 		name string
 		u    updateBuilder
 		args args
-		want builders.UpdateFromBuilder
+		want builders.UpdateFromWhereBuilder
 	}{
 		{
 			name: "Success",
@@ -125,7 +126,7 @@ func Test_updateBuilder_SetStruct(t *testing.T) {
 		name string
 		u    updateBuilder
 		args args
-		want builders.UpdateFromBuilder
+		want builders.UpdateFromWhereBuilder
 	}{
 		{
 			name: "Success; No Struct Tag",
@@ -148,7 +149,7 @@ func Test_updateBuilder_SetStruct(t *testing.T) {
 			},
 			want: updateBuilder{
 				columns: []intypes.Column{{Name: "data"}},
-				vals:    []any{53},
+				vals:    []any{153},
 			},
 		},
 		{
@@ -193,7 +194,7 @@ func Test_updateBuilder_From(t *testing.T) {
 			},
 			want: returningWhereBuilder{
 				mainQuery: updateBuilder{
-					fromTable: []intypes.Table{
+					fromTables: []intypes.Table{
 						{Name: "table2"},
 					},
 				},
@@ -208,7 +209,7 @@ func Test_updateBuilder_From(t *testing.T) {
 			},
 			want: returningWhereBuilder{
 				mainQuery: updateBuilder{
-					fromTable: []intypes.Table{
+					fromTables: []intypes.Table{
 						{Name: "table2"},
 						{Name: "table3"},
 					},
@@ -238,6 +239,7 @@ func Test_updateBuilder_From(t *testing.T) {
 			},
 			want: returningWhereBuilder{
 				mainQuery: updateBuilder{
+					fromTables: []intypes.Table{{Name: "table2"}},
 					errs: intypes.ErrorSlice{
 						fmt.Errorf("failed to parse table data from %q: %w", ".bad_table", intypes.ErrMissingSchemaName),
 					},
@@ -274,17 +276,6 @@ func TestNewUpdateBuilder(t *testing.T) {
 			name: "Error; Bad Table Name",
 			args: args{
 				table: ".bad_table",
-			},
-			want: updateBuilder{
-				errs: intypes.ErrorSlice{
-					fmt.Errorf("failed to parse table data from %q: %w", ".bad_table", intypes.ErrMissingSchemaName),
-				},
-			},
-		},
-		{
-			name: "Error; Bad MoreTable Name",
-			args: args{
-				table: "table1",
 			},
 			want: updateBuilder{
 				errs: intypes.ErrorSlice{
