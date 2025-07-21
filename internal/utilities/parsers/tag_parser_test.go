@@ -15,6 +15,10 @@ func TestColumnTagParser(t *testing.T) {
 		vals []any
 	}
 
+	type innerTestStruct struct {
+		Data string `jagsqlb:"inner_data"`
+	}
+
 	tests := []struct {
 		name      string
 		args      args
@@ -42,6 +46,44 @@ func TestColumnTagParser(t *testing.T) {
 			wants: wants{
 				cols: []string{"data"},
 				vals: []any{52},
+			},
+			assertion: assert.NoError,
+		},
+		{
+			name: "Success; With Nested Struct",
+			args: args{
+				input: struct {
+					Data      string `jagsqlb:"data"`
+					InnerData innerTestStruct
+				}{
+					Data: "outer",
+					InnerData: innerTestStruct{
+						Data: "inner",
+					},
+				},
+			},
+			wants: wants{
+				cols: []string{"data", "inner_data"},
+				vals: []any{"outer", "inner"},
+			},
+			assertion: assert.NoError,
+		},
+		{
+			name: "Success; With Omitted Field",
+			args: args{
+				input: struct {
+					Data      string          `jagsqlb:"data"`
+					InnerData innerTestStruct `jagsqlb:";omit"`
+				}{
+					Data: "outer",
+					InnerData: innerTestStruct{
+						Data: "inner",
+					},
+				},
+			},
+			wants: wants{
+				cols: []string{"data"},
+				vals: []any{"outer"},
 			},
 			assertion: assert.NoError,
 		},
