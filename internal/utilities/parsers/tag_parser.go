@@ -3,10 +3,11 @@ package parsers
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 var (
-	ErrInputTypeNotStruct = fmt.Errorf("recieved value is not a struct type")
+	ErrInputTypeNotStruct = fmt.Errorf("received value is not a struct type")
 )
 
 // ParseColumnTag expects a struct for `input`. If it isn't a struct, then an error is returned.
@@ -27,23 +28,49 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 		return nil, nil, ErrInputTypeNotStruct
 	}
 
-	// Since NumField always checks to see if `inputType` is a struct, it's better to just
-	// store NumField in a variable so it doesn't have to run that check over and over.
-	fieldCount := inputType.NumField()
-	cols = make([]string, fieldCount)
-	vals = make([]any, fieldCount)
-
-	for i := range fieldCount {
+	cols = []string{}
+	vals = []any{}
+	for i := range inputType.NumField() {
 		fieldType := inputType.Field(i)
 		fieldVal := inputValue.Field(i)
 
-		if colName := fieldType.Tag.Get("jagsqlb"); colName != "" {
-			cols[i] = colName
-		} else {
-			cols[i] = fieldType.Name
+		tagVal := fieldType.Tag.Get("jagsqlb")
+		splitVals := strings.Split(tagVal, ";")
+
+		tagData := tagData{
+			columnName: splitVals[0],
 		}
-		vals[i] = fieldVal.Interface()
+		for i := 1; i < len(splitVals); i++ {
+			switch splitVals[i] {
+			case "omit":
+				//TODO?(BW): Consider conditional omits. For example, omit if an insert/update statement, or if empty, and so on.
+				tagData.omit = true
+			}
+		}
+
+		if tagData.omit {
+			continue
+		}
+
+		if fieldType.Type.Kind() == reflect.Struct {
+			c, v, _ := ParseColumnTag(fieldVal.Interface())
+			cols = append(cols, c...)
+			vals = append(vals, v...)
+			continue
+		}
+
+		if tagData.columnName != "" {
+			cols = append(cols, tagData.columnName)
+		} else {
+			cols = append(cols, fieldType.Name)
+		}
+		vals = append(vals, fieldVal.Interface())
 	}
 
 	return cols, vals, nil
+}
+
+type tagData struct {
+	columnName string
+	omit       bool
 }
