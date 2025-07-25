@@ -50,11 +50,11 @@ func TestColumnTagParser(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
-			name: "Success; With Nested Struct",
+			name: "Success; With Inline Struct",
 			args: args{
 				input: struct {
-					Data      string `jagsqlb:"data"`
-					InnerData innerTestStruct
+					Data      string          `jagsqlb:"data"`
+					InnerData innerTestStruct `jagsqlb:";inline"`
 				}{
 					Data: "outer",
 					InnerData: innerTestStruct{

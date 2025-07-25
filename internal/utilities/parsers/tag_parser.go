@@ -42,6 +42,8 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 		}
 		for i := 1; i < len(splitVals); i++ {
 			switch splitVals[i] {
+			case "inline":
+				tagData.inline = true
 			case "omit":
 				//TODO?(BW): Consider conditional omits. For example, omit if an insert/update statement, or if empty, and so on.
 				tagData.omit = true
@@ -52,7 +54,7 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 			continue
 		}
 
-		if fieldType.Type.Kind() == reflect.Struct {
+		if tagData.inline && fieldType.Type.Kind() == reflect.Struct {
 			c, v, _ := ParseColumnTag(fieldVal.Interface())
 			cols = append(cols, c...)
 			vals = append(vals, v...)
@@ -72,5 +74,6 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 
 type tagData struct {
 	columnName string
+	inline     bool
 	omit       bool
 }
