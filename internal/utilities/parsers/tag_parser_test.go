@@ -1,7 +1,9 @@
 package parsers
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -101,9 +103,46 @@ func TestColumnTagParser(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; With QueryMarshaler Implemented",
+			args: args{
+				input: struct {
+					TestData testMarshalStruct `jagsqlb:"testData"`
+				}{
+					TestData: testMarshalStruct{Data: "testing", MoreData: "tester"},
+				},
+			},
+			wants: wants{
+				cols: []string{"testData"},
+				vals: []any{"testing/tester"},
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Error; Incorrect Parameter Type",
 			args: args{
 				input: "badInput",
+			},
+			assertion: assert.Error,
+		},
+		{
+			name: "Error; QueryMarshaler",
+			args: args{
+				input: struct {
+					TestData testMarshalStruct `jagsqlb:"testData"`
+				}{
+					TestData: testMarshalStruct{Data: "err", MoreData: "tester"},
+				},
+			},
+			assertion: assert.Error,
+		},
+		{
+			name: "Error; Nested Struct QueryMarshaler",
+			args: args{
+				input: struct {
+					Data testMarshalStruct
+				}{
+					testMarshalStruct{Data: "err", MoreData: "tester"},
+				},
 			},
 			assertion: assert.Error,
 		},
@@ -116,4 +155,16 @@ func TestColumnTagParser(t *testing.T) {
 			assert.Equal(t, tt.wants.vals, gotVals)
 		})
 	}
+}
+
+type testMarshalStruct struct {
+	Data     string
+	MoreData string
+}
+
+func (tms testMarshalStruct) MarshalQuery() (string, error) {
+	if tms.Data == "err" {
+		return "", assert.AnError
+	}
+	return fmt.Sprintf("%s/%s", tms.Data, tms.MoreData), nil
 }

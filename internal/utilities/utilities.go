@@ -7,7 +7,7 @@ import (
 	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
-// CoalesceSelectColumnsFullString takes in a slice of SelectColumns and returns them as a comma seperated string
+// CoalesceSelectColumnsFullString takes in a slice of SelectColumns and returns them as a comma separated string
 // using its fully-qualified definition
 func CoalesceSelectColumnsFullString(cols []intypes.SelectColumn) string {
 	if len(cols) == 0 {
@@ -27,7 +27,7 @@ func CoalesceSelectColumnsFullString(cols []intypes.SelectColumn) string {
 	return result
 }
 
-// CoalesceSelectColumnNamesString takes in a slice of SelectColumns and returns them as a comma seperated string
+// CoalesceSelectColumnNamesString takes in a slice of SelectColumns and returns them as a comma separated string
 // using only the name of the column, and its alias (if one was provided).
 func CoalesceSelectColumnNamesString(cols []intypes.SelectColumn) string {
 	if len(cols) == 0 {
@@ -53,7 +53,7 @@ func CoalesceSelectColumnNamesString(cols []intypes.SelectColumn) string {
 	return result
 }
 
-// CoalesceTablesString takesw in a slice of Tables and returns them as a comma sperated string using its fully qualified definition
+// CoalesceTablesString takes in a slice of Tables and returns them as a comma separated string using its fully qualified definition
 func CoalesceTablesString(tables []intypes.Table) string {
 	if len(tables) == 0 {
 		return ""

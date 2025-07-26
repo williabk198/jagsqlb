@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+
+	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
 var (
@@ -54,8 +56,28 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 			continue
 		}
 
-		if tagData.inline && fieldType.Type.Kind() == reflect.Struct {
-			c, v, _ := ParseColumnTag(fieldVal.Interface())
+		fieldData := fieldVal.Interface()
+		if fieldType.Type.Implements(reflect.TypeFor[intypes.QueryMarshaler]()) {
+			// If the current field implements the QueryMarshaler interface, the use that
+			// to build the value for the column
+			qm := fieldVal.Interface().(intypes.QueryMarshaler)
+			fieldData, err = qm.MarshalQuery()
+			if err != nil {
+				return nil, nil, fmt.Errorf(
+					"failed to marshal struct data for field %q: %w",
+					fieldType.Name, err,
+				)
+			}
+		} else if tagData.inline && fieldType.Type.Kind() == reflect.Struct {
+			// Otherwise, if the property is a struct and has been marked as "inline",
+			// then recursively call ParseColumnTag to get the columns and values of the nested struct
+			c, v, e := ParseColumnTag(fieldVal.Interface())
+			if e != nil {
+				return nil, nil, fmt.Errorf(
+					"failed to marshal nested struct data for field %q: %w",
+					fieldType.Name, e,
+				)
+			}
 			cols = append(cols, c...)
 			vals = append(vals, v...)
 			continue
@@ -66,7 +88,7 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 		} else {
 			cols = append(cols, fieldType.Name)
 		}
-		vals = append(vals, fieldVal.Interface())
+		vals = append(vals, fieldData)
 	}
 
 	return cols, vals, nil
