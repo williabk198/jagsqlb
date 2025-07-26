@@ -50,6 +50,19 @@ func TestColumnTagParser(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; With time.Time Value",
+			args: args{
+				input: struct {
+					Timestamp time.Time `jagsqlb:"ts"`
+				}{time.Unix(1753502400, 0)},
+			},
+			wants: wants{
+				cols: []string{"ts"},
+				vals: []any{time.Unix(1753502400, 0)},
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Success; With Inline Struct",
 			args: args{
 				input: struct {
