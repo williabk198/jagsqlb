@@ -370,6 +370,21 @@ func Test_returningWhereBuilder_Build(t *testing.T) {
 			},
 			assertion: assert.NoError,
 		},
+		{
+			name: "Success; Update Statement",
+			rwb: returningWhereBuilder{
+				mainQuery: NewUpdateBuilder("table1").SetMap(map[string]any{"col1": "testing", "col2": 42}),
+				conditions: []whereCondition{
+					{condition: condition.Equals("id", "testID")},
+				},
+				existingParams: 2,
+			},
+			wants: wants{
+				query:  `UPDATE "table1" SET "col1"=$1, "col2"=$2 WHERE "id" = $3;`,
+				params: []any{"testing", 42, "testID"},
+			},
+			assertion: assert.NoError,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

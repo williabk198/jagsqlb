@@ -68,7 +68,7 @@ func (u updateBuilder) Build() (query string, queryParams []any, err error) {
 		}
 	}
 
-	return finalizeQuery(sb.String()), u.vals, nil
+	return finalizeQuery(sb.String(), 0), u.vals, nil
 }
 
 // SetMap implements builders.UpdateBuilder.
@@ -142,7 +142,8 @@ func (u updateBuilder) From(table string, moreTables ...string) builders.Returni
 
 func (u updateBuilder) Where(cond incondition.Condition, moreConds ...incondition.Condition) builders.ReturningWhereBuilder {
 	rwb := returningWhereBuilder{
-		mainQuery: u,
+		mainQuery:      u,
+		existingParams: len(u.vals),
 	}
 	return rwb.And(cond, moreConds...)
 }

@@ -11,8 +11,9 @@ import (
 
 // selectWhereBuilder implements `builders.SelectWhereBuilder` and represents the WHERE cluase in a SELECT statement
 type selectWhereBuilder struct {
-	mainQuery  builders.Builder
-	conditions whereConditions
+	mainQuery      builders.Builder
+	conditions     whereConditions
+	existingParams int
 }
 
 func (w selectWhereBuilder) Build() (query string, queryParams []any, err error) {
@@ -41,7 +42,7 @@ func (w selectWhereBuilder) Build() (query string, queryParams []any, err error)
 	}
 	sb.WriteRune(';')
 
-	return finalizeQuery(sb.String()), params, nil
+	return finalizeQuery(sb.String(), w.existingParams), params, nil
 }
 
 func (w selectWhereBuilder) And(cond incondition.Condition, additionalConds ...incondition.Condition) builders.SelectWhereBuilder {
@@ -104,8 +105,9 @@ func (w selectWhereBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings
 //TODO: Look into a better way of handling returningWhereBuilder. A lot of duplicated code here
 
 type returningWhereBuilder struct {
-	mainQuery  builders.Builder
-	conditions whereConditions
+	mainQuery      builders.Builder
+	conditions     whereConditions
+	existingParams int
 }
 
 func (rwb returningWhereBuilder) Build() (query string, queryParams []any, err error) {
@@ -134,7 +136,7 @@ func (rwb returningWhereBuilder) Build() (query string, queryParams []any, err e
 	}
 	sb.WriteRune(';')
 
-	return finalizeQuery(sb.String()), params, nil
+	return finalizeQuery(sb.String(), rwb.existingParams), params, nil
 }
 
 func (rwb returningWhereBuilder) And(cond incondition.Condition, additionalConds ...incondition.Condition) builders.ReturningWhereBuilder {

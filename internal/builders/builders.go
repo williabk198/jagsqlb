@@ -99,9 +99,9 @@ func (lb limitBuilder) Build() (string, []any, error) {
 }
 
 // finalizeQuery replaces any "?" characters in the provided query with "$n" characters
-func finalizeQuery(query string) string {
+func finalizeQuery(query string, existingParams int) string {
 	pattern := regexp.MustCompile(`\?`)
-	count := 0
+	count := existingParams
 	result := pattern.ReplaceAllStringFunc(query, func(value string) string {
 		count++
 		return fmt.Sprintf("$%d", count)
