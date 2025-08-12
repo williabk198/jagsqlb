@@ -152,7 +152,7 @@ func Test_updateBuilder_SetStruct(t *testing.T) {
 				errs: intypes.ErrorSlice{
 					fmt.Errorf(
 						"failed to process argument of SetStruct: %w",
-						fmt.Errorf("recieved value is not a struct type"),
+						fmt.Errorf("received value is not a struct type"),
 					),
 				},
 			},

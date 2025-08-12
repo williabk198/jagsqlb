@@ -405,7 +405,7 @@ func Test_insertBuilder_Data(t *testing.T) {
 					errs: intypes.ErrorSlice{
 						fmt.Errorf(
 							"failed to process argument 0 of Data function: %w",
-							fmt.Errorf("recieved value is not a struct type"),
+							fmt.Errorf("received value is not a struct type"),
 						),
 					},
 				},
@@ -423,7 +423,7 @@ func Test_insertBuilder_Data(t *testing.T) {
 					errs: intypes.ErrorSlice{
 						fmt.Errorf(
 							"failed to process argument 1 of Data function: %w",
-							fmt.Errorf("recieved value is not a struct type"),
+							fmt.Errorf("received value is not a struct type"),
 						),
 					},
 				},
