@@ -272,11 +272,9 @@ func Test_updateBuilder_Where(t *testing.T) {
 					vals:    []any{"test"},
 				},
 				conditions: whereConditions{
-					{
-						conjunction: "AND",
-						condition:   condition.Equals("col2", 56),
-					},
+					{condition: condition.Equals("col2", 56)},
 				},
+				existingParams: 1,
 			},
 		},
 	}
