@@ -141,11 +141,17 @@ func (u updateBuilder) From(table string, moreTables ...string) builders.Returni
 }
 
 func (u updateBuilder) Where(cond incondition.Condition, moreConds ...incondition.Condition) builders.ReturningWhereBuilder {
-	rwb := returningWhereBuilder{
+	var rwb builders.ReturningWhereBuilder = returningWhereBuilder{
 		mainQuery:      u,
+		conditions:     whereConditions{{condition: cond}},
 		existingParams: len(u.vals),
 	}
-	return rwb.And(cond, moreConds...)
+
+	if len(moreConds) > 0 {
+		rwb = rwb.And(moreConds[0], moreConds[1:]...)
+	}
+
+	return rwb
 }
 
 func NewUpdateBuilder(table string) builders.UpdateBuilder {
