@@ -47,7 +47,7 @@ func (obb orderByBuilder) Build() (string, []any, error) {
 	return query, params, nil
 }
 
-func (oob orderByBuilder) Offset(offset uint) builders.OffsetBuilder {
+func (oob orderByBuilder) Offset(offset uint) builders.LimitBuilder {
 	return offsetBuilder{
 		precedingBuilder: oob,
 		offset:           offset,

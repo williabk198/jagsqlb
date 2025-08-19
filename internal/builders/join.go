@@ -137,14 +137,14 @@ func (jb joinBuilder) Limit(limit uint) builders.Builder {
 	}
 }
 
-func (jb joinBuilder) Offset(offset uint) builders.OffsetBuilder {
+func (jb joinBuilder) Offset(offset uint) builders.LimitBuilder {
 	return offsetBuilder{
 		precedingBuilder: jb,
 		offset:           offset,
 	}
 }
 
-func (jb joinBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings ...types.ColumnOrdering) builders.OrderByBuilder {
+func (jb joinBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings ...types.ColumnOrdering) builders.OffsetBuilder {
 	return orderByBuilder{
 		precedingBuilder: jb,
 		columnOrderings:  append([]types.ColumnOrdering{ordering}, moreOrderings...),

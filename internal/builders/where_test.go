@@ -246,7 +246,7 @@ func Test_whereBuilder_Offset(t *testing.T) {
 		name string
 		w    selectWhereBuilder
 		args args
-		want builders.OffsetBuilder
+		want builders.LimitBuilder
 	}{
 		{
 			name: "Success",
@@ -276,7 +276,7 @@ func Test_whereBuilder_OrderBy(t *testing.T) {
 		name string
 		w    selectWhereBuilder
 		args args
-		want builders.OrderByBuilder
+		want builders.OffsetBuilder
 	}{
 		{
 			name: "Success",

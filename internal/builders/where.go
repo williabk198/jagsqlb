@@ -87,7 +87,7 @@ func (w selectWhereBuilder) Limit(limit uint) builders.Builder {
 }
 
 // Offset implements builders.WhereBuilder.
-func (w selectWhereBuilder) Offset(offset uint) builders.OffsetBuilder {
+func (w selectWhereBuilder) Offset(offset uint) builders.LimitBuilder {
 	return offsetBuilder{
 		precedingBuilder: w,
 		offset:           offset,
@@ -95,7 +95,7 @@ func (w selectWhereBuilder) Offset(offset uint) builders.OffsetBuilder {
 }
 
 // OrderBy implements builders.WhereBuilder.
-func (w selectWhereBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings ...types.ColumnOrdering) builders.OrderByBuilder {
+func (w selectWhereBuilder) OrderBy(ordering types.ColumnOrdering, moreOrderings ...types.ColumnOrdering) builders.OffsetBuilder {
 	return orderByBuilder{
 		precedingBuilder: w,
 		columnOrderings:  append([]types.ColumnOrdering{ordering}, moreOrderings...),

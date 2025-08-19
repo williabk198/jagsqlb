@@ -381,7 +381,7 @@ func Test_joinBuilder_Offset(t *testing.T) {
 		name string
 		jb   joinBuilder
 		args args
-		want builders.OffsetBuilder
+		want builders.LimitBuilder
 	}{
 		{
 			name: "Success",
@@ -411,7 +411,7 @@ func Test_joinBuilder_OrderBy(t *testing.T) {
 		name string
 		jb   joinBuilder
 		args args
-		want builders.OrderByBuilder
+		want builders.OffsetBuilder
 	}{
 		{
 			name: "Success",

@@ -530,7 +530,7 @@ func Test_selectBuilder_Offset(t *testing.T) {
 		name string
 		s    selectBuilder
 		args args
-		want builders.OffsetBuilder
+		want builders.LimitBuilder
 	}{
 		{
 			name: "Success",
@@ -560,7 +560,7 @@ func Test_selectBuilder_OrderBy(t *testing.T) {
 		name string
 		s    selectBuilder
 		args args
-		want builders.OrderByBuilder
+		want builders.OffsetBuilder
 	}{
 		{
 			name: "Success",

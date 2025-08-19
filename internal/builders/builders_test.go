@@ -104,7 +104,7 @@ func Test_orderByBuilder_Offset(t *testing.T) {
 		name string
 		oob  orderByBuilder
 		args args
-		want builders.OffsetBuilder
+		want builders.LimitBuilder
 	}{
 		{
 			name: "Success",

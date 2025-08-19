@@ -92,7 +92,7 @@ func (s selectBuilder) Limit(limit uint) builders.Builder {
 }
 
 // Offset implements builders.SelectBuilder.
-func (s selectBuilder) Offset(offset uint) builders.OffsetBuilder {
+func (s selectBuilder) Offset(offset uint) builders.LimitBuilder {
 	return offsetBuilder{
 		precedingBuilder: s,
 		offset:           offset,
@@ -100,7 +100,7 @@ func (s selectBuilder) Offset(offset uint) builders.OffsetBuilder {
 }
 
 // OrderBy implements builders.SelectBuilder.
-func (s selectBuilder) OrderBy(columnOrder types.ColumnOrdering, moreColumnOrders ...types.ColumnOrdering) builders.OrderByBuilder {
+func (s selectBuilder) OrderBy(columnOrder types.ColumnOrdering, moreColumnOrders ...types.ColumnOrdering) builders.OffsetBuilder {
 	return orderByBuilder{
 		precedingBuilder: s,
 		columnOrderings:  append([]types.ColumnOrdering{columnOrder}, moreColumnOrders...),
