@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	ErrMissingAliasName  = NewInvalidSytaxError("alias name not provided")
-	ErrMissingColumnName = NewInvalidSytaxError("column name not provided")
-	ErrMissingSchemaName = NewInvalidSytaxError("schema name not provided")
-	ErrMissingTableName  = NewInvalidSytaxError("table name not provided")
+	ErrMissingAliasName  = NewInvalidSyntaxError("alias name not provided")
+	ErrMissingColumnName = NewInvalidSyntaxError("column name not provided")
+	ErrMissingSchemaName = NewInvalidSyntaxError("schema name not provided")
+	ErrMissingTableName  = NewInvalidSyntaxError("table name not provided")
 )
 
-func NewInvalidSytaxError(errString string) error {
+func NewInvalidSyntaxError(errString string) error {
 	return fmt.Errorf("invalid syntax error: %s", errString)
 }
 

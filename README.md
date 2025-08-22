@@ -429,6 +429,6 @@ INSERT INTO "persons" ("given_name", "family_name", "dob", "pronouns") VALUES ($
 }
 ```
 
-*__IMPORTANT:__* `QueryMashaler` can only convert a type to a `string` value. If you wish to convert something
+*__IMPORTANT:__* `QueryMarshaler` can only convert a type to a `string` value. If you wish to convert something
 into a non-string type, then you will need to do the conversion yourself and store the value as the appropriate
 type within the struct.

@@ -78,7 +78,7 @@ func (sc SimpleCondition) Parameterize() (string, []any, error) {
 	// If the slice of values contains a ColumnValue and this is an "IN" condition, then throw an error.
 	// The column will be treated as a string; leading to unwanted results.
 	if containsColumnValue(sc.Values) && inOperation {
-		return "", nil, fmt.Errorf("cannot have a ColumnValue within a parametreized IN condition")
+		return "", nil, fmt.Errorf("cannot have a ColumnValue within a parameterized IN condition")
 	}
 	return fmt.Sprintf("%s %s ?", column, sc.Operator), sc.Values, nil
 }

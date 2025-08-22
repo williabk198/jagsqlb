@@ -39,7 +39,7 @@ func Test_updateBuilder_Build(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
-			name: "Sucess; w/ From",
+			name: "Success; w/ From",
 			u: updateBuilder{
 				table: intypes.Table{Name: "table1"},
 				columns: []intypes.Column{

@@ -34,13 +34,13 @@ func (cp columnParser) Parse(columnStr string) (intypes.Column, error) {
 	if err != nil {
 		// If the user attempted to give an alias to a column, then error out.
 		if errors.Is(err, intypes.ErrMissingAliasName) {
-			return intypes.Column{}, intypes.NewInvalidSytaxError("partial alias definition in non-select column")
+			return intypes.Column{}, intypes.NewInvalidSyntaxError("partial alias definition in non-select column")
 		}
 	}
 
 	// If the user gave an alias to this column, then return an error.
 	if alias != "" {
-		return intypes.Column{}, intypes.NewInvalidSytaxError("alias was provided to non-select column")
+		return intypes.Column{}, intypes.NewInvalidSyntaxError("alias was provided to non-select column")
 	}
 
 	if input == "" {

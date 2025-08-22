@@ -9,7 +9,7 @@ import (
 	"github.com/williabk198/jagsqlb/types"
 )
 
-// selectWhereBuilder implements `builders.SelectWhereBuilder` and represents the WHERE cluase in a SELECT statement
+// selectWhereBuilder implements `builders.SelectWhereBuilder` and represents the WHERE clause in a SELECT statement
 type selectWhereBuilder struct {
 	mainQuery      builders.Builder
 	conditions     whereConditions

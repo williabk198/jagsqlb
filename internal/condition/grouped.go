@@ -54,13 +54,13 @@ func (gc GroupedConditions) parameterizeHelper(cond Condition, currParams *[]any
 		return "", err
 	}
 
-	// If the condition is a grouped condition or the paramaterized string doesn't represent an "IN" condition,
-	// then appened each element in `params` to the current slice of query parameters
+	// If the condition is a grouped condition or the parameterized string doesn't represent an "IN" condition,
+	// then append each element in `params` to the current slice of query parameters
 	if _, ok := cond.(GroupedConditions); ok || !strings.Contains(str, " IN ") {
 		*currParams = append(*currParams, params...)
 	} else {
 		// Otherwise, this condition represents an "IN" SimpleCondition, and we want to append the slice as a single
-		// elemnet to the slice of current query parameters
+		// element to the slice of current query parameters
 		*currParams = append(*currParams, params)
 	}
 

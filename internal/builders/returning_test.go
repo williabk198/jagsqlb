@@ -100,7 +100,7 @@ func Test_returningBuilder_Returning(t *testing.T) {
 			},
 		},
 		{
-			name: "Success; Multiple Coulmns",
+			name: "Success; Multiple Columns",
 			rb:   returningBuilder{},
 			args: args{
 				column:      "col1",

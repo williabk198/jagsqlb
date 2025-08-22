@@ -139,7 +139,7 @@ func Test_selectBuilder_Build(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		// NOTE: Not going to try to test for every possible error here. That feels like it would be re-testing the parsers.
-		//       Instead, just test to see if an error for parseing table, column data, and then both.
+		//       Instead, just test to see if an error for parsing table, column data, and then both.
 		{
 			name:      "Error, Bad Table Value",
 			s:         NewSelectBuilder(".badValue"),

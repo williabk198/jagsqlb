@@ -19,7 +19,7 @@ func ColumnValue(columnName string) incondition.ColumnValue {
 	}
 }
 
-// Equals returns a condtion that can be used in building `WHERE` and `JOIN` clauses that equates a column to a value
+// Equals returns a condition that can be used in building `WHERE` and `JOIN` clauses that equates a column to a value
 func Equals(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
 		ColumnName: columnName,
@@ -28,7 +28,7 @@ func Equals(columnName string, value any) incondition.Condition {
 	}
 }
 
-// NotEquals returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// NotEquals returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should not be equal to the given value
 func NotEquals(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -38,7 +38,7 @@ func NotEquals(columnName string, value any) incondition.Condition {
 	}
 }
 
-// GreaterThan returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// GreaterThan returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should be greater than the given value
 func GreaterThan(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -48,7 +48,7 @@ func GreaterThan(columnName string, value any) incondition.Condition {
 	}
 }
 
-// GreaterThanEqual returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// GreaterThanEqual returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should be greater than or equal to the given value
 func GreaterThanEqual(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -58,7 +58,7 @@ func GreaterThanEqual(columnName string, value any) incondition.Condition {
 	}
 }
 
-// LessThan returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// LessThan returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should be less than the given value
 func LessThan(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -68,7 +68,7 @@ func LessThan(columnName string, value any) incondition.Condition {
 	}
 }
 
-// LessThanEqual returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// LessThanEqual returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should be less than or equal to the given value
 func LessThanEqual(columnName string, value any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -78,7 +78,7 @@ func LessThanEqual(columnName string, value any) incondition.Condition {
 	}
 }
 
-// IsNull returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// IsNull returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should be NULL
 func IsNull(columnName string) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -88,7 +88,7 @@ func IsNull(columnName string) incondition.Condition {
 	}
 }
 
-// IsNotNull returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// IsNotNull returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a column should not be NULL
 func IsNotNull(columnName string) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -98,7 +98,7 @@ func IsNotNull(columnName string) incondition.Condition {
 	}
 }
 
-// In returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// In returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a columns value should be in the provided slice of values
 func In(columnName string, value []any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -108,7 +108,7 @@ func In(columnName string, value []any) incondition.Condition {
 	}
 }
 
-// NotIn returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// NotIn returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a columns value should not be in the provided slice of values
 func NotIn(columnName string, value []any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -118,7 +118,7 @@ func NotIn(columnName string, value []any) incondition.Condition {
 	}
 }
 
-// Between returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// Between returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a columns value should be between the two provided values
 func Between(columnName string, val1, val2 any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -128,7 +128,7 @@ func Between(columnName string, val1, val2 any) incondition.Condition {
 	}
 }
 
-// NotBetween returns a condtion that can be used in building `WHERE` and `JOIN` clauses that
+// NotBetween returns a condition that can be used in building `WHERE` and `JOIN` clauses that
 // indicates a columns value should not be between the two provided values
 func NotBetween(columnName string, val1, val2 any) incondition.Condition {
 	return incondition.SimpleCondition{
@@ -139,9 +139,9 @@ func NotBetween(columnName string, val1, val2 any) incondition.Condition {
 }
 
 // GroupedAnd returns a grouping of conditions with the AND operator between each of them. This can be used like any other condition
-// For example if you wanted to create the condition `(t1.col1 = 42 AND t1.col2 != 'testing')`, then you canuse `GroupedAnd` like so:
+// For example if you wanted to create the condition `(t1.col1 = 42 AND t1.col2 != 'testing')`, then you can use `GroupedAnd` like so:
 //
-//	condition.GroupedAnd(condtion.Equals("t1.col1", 42), condition.NotEqual("t1.col2", "testing"))
+//	condition.GroupedAnd(condition.Equals("t1.col1", 42), condition.NotEqual("t1.col2", "testing"))
 func GroupedAnd(cond1, cond2 incondition.Condition, additionalConds ...incondition.Condition) incondition.Condition {
 	conds := []incondition.Condition{cond1, cond2}
 	conds = append(conds, additionalConds...)
@@ -153,9 +153,9 @@ func GroupedAnd(cond1, cond2 incondition.Condition, additionalConds ...inconditi
 }
 
 // GroupedOr returns a grouping of conditions with the OR operator between each of them. This can be used like any other condition
-// For example if you wanted to create the condition `(t1.col1 = 42 OR t1.col2 < 55)`, then you canuse `GroupedOr` like so:
+// For example if you wanted to create the condition `(t1.col1 = 42 OR t1.col2 < 55)`, then you can use `GroupedOr` like so:
 //
-//	condition.GroupedOr(condtion.Equals("t1.col1", 42), condition.LessThan("t1.col2", 55))
+//	condition.GroupedOr(condition.Equals("t1.col1", 42), condition.LessThan("t1.col2", 55))
 func GroupedOr(cond1, cond2 incondition.Condition, additionalConds ...incondition.Condition) incondition.Condition {
 	conds := []incondition.Condition{cond1, cond2}
 	conds = append(conds, additionalConds...)
