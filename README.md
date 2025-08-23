@@ -1,3 +1,8 @@
+[![go.mod](https://img.shields.io/github/go-mod/go-version/williabk198/jagsqlb)](go.mod)
+[![go report](https://goreportcard.com/badge/github.com/williabk198/jagsqlb)](https://goreportcard.com/report/github.com/williabk198/jagsqlb)
+[![test status](https://github.com/williabk198/jagsqlb/workflows/test/badge.svg)](https://github.com/williabk198/jagsqlb/actions/workflows/test.yaml)
+[![LICENSE](https://img.shields.io/github/license/williabk198/jagsqlb)](LICENSE) 
+
 # Just Another Go(JAG) SQL Builder
 
 This library aims to provide an easy and simple way to build SQL queries that can be used with `database/sql`, or similar packages.
