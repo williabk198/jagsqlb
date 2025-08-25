@@ -327,7 +327,7 @@ then you annotate the field(s) in question by adding `;omit` after the column na
 
 ```go
 type TestData struct {
-  ID uuid.UUID `;omit`
+  ID          uuid.UUID `jagsqlb:";omit"`
   DateOfBirth time.Time `jagsqlb:"dob"`
 }
 ```
