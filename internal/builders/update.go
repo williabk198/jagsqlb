@@ -93,7 +93,7 @@ func (u updateBuilder) SetMap(colValMap map[string]any) builders.UpdateFromWhere
 
 // SetStruct implements builders.UpdateBuilder.
 func (u updateBuilder) SetStruct(value any) builders.UpdateFromWhereBuilder {
-	cols, vals, err := parsers.ParseColumnTag(value)
+	cols, vals, err := parsers.ParseColumnTag(intypes.QueryTypeUpdate, value)
 	if err != nil {
 		u.errs = append(u.errs, fmt.Errorf("failed to process argument of SetStruct: %w", err))
 		return u

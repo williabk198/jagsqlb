@@ -114,7 +114,7 @@ func (ib insertBuilder) DefaultValues() builders.ReturningBuilder {
 }
 
 func (ib insertBuilder) Data(data any, moreData ...any) builders.ReturningBuilder {
-	cols, vals, err := parsers.ParseColumnTag(data)
+	cols, vals, err := parsers.ParseColumnTag(intypes.QueryTypeInsert, data)
 	if err != nil {
 		ib.errs = append(ib.errs, fmt.Errorf("failed to process argument 0 of Data function: %w", err))
 		return returningBuilder{
@@ -124,7 +124,7 @@ func (ib insertBuilder) Data(data any, moreData ...any) builders.ReturningBuilde
 
 	moreVals := make([][]any, len(moreData))
 	for i, md := range moreData {
-		_, valData, err := parsers.ParseColumnTag(md)
+		_, valData, err := parsers.ParseColumnTag(intypes.QueryTypeInsert, md)
 		if err != nil {
 			ib.errs = append(ib.errs, fmt.Errorf("failed to process argument %d of Data function: %w", i+1, err))
 			return returningBuilder{
