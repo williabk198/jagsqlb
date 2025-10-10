@@ -15,7 +15,7 @@ var (
 // ParseColumnTag expects a struct for `input`. If it isn't a struct, then an error is returned.
 // Otherwise, it will look for the `jagsqlb` struct tag which denotes the names of the column in
 // the database and returns the mapping of that column to its corresponding value.
-func ParseColumnTag(input any) (cols []string, vals []any, err error) {
+func ParseColumnTag(queryType intypes.QueryType, input any) (cols []string, vals []any, err error) {
 	// Since we are working with the reflect package, we need to worry about handling panics so that it errors out gracefully,
 	// instead of just crashing out.
 	defer func() {
@@ -47,12 +47,15 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 			case "inline":
 				tagData.inline = true
 			case "omit":
-				//TODO?(BW): Consider conditional omits. For example, omit if an insert/update statement, or if empty, and so on.
 				tagData.omit = true
+			case "omit-insert":
+				tagData.omitInsert = true
+			case "omit-update":
+				tagData.omitUpdate = true
 			}
 		}
 
-		if tagData.omit {
+		if tagData.omit || queryType == intypes.QueryTypeInsert && tagData.omitInsert || queryType == intypes.QueryTypeUpdate && tagData.omitUpdate {
 			continue
 		}
 
@@ -71,7 +74,7 @@ func ParseColumnTag(input any) (cols []string, vals []any, err error) {
 		} else if tagData.inline && fieldType.Type.Kind() == reflect.Struct {
 			// Otherwise, if the property is a struct and has been marked as "inline",
 			// then recursively call ParseColumnTag to get the columns and values of the nested struct
-			c, v, e := ParseColumnTag(fieldVal.Interface())
+			c, v, e := ParseColumnTag(queryType, fieldVal.Interface())
 			if e != nil {
 				return nil, nil, fmt.Errorf(
 					"failed to marshal nested struct data for field %q: %w",
@@ -98,4 +101,6 @@ type tagData struct {
 	columnName string
 	inline     bool
 	omit       bool
+	omitInsert bool
+	omitUpdate bool
 }

@@ -6,11 +6,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	intypes "github.com/williabk198/jagsqlb/internal/types"
 )
 
 func TestColumnTagParser(t *testing.T) {
 	type args struct {
-		input any
+		queryType intypes.QueryType
+		input     any
 	}
 	type wants struct {
 		cols []string
@@ -103,6 +105,46 @@ func TestColumnTagParser(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; With Omitted Insert Field",
+			args: args{
+				queryType: intypes.QueryTypeInsert,
+				input: struct {
+					Data      string          `jagsqlb:"data"`
+					InnerData innerTestStruct `jagsqlb:";omit-insert"`
+				}{
+					Data: "outer",
+					InnerData: innerTestStruct{
+						Data: "inner",
+					},
+				},
+			},
+			wants: wants{
+				cols: []string{"data"},
+				vals: []any{"outer"},
+			},
+			assertion: assert.NoError,
+		},
+		{
+			name: "Success; With Omitted Update Field",
+			args: args{
+				queryType: intypes.QueryTypeUpdate,
+				input: struct {
+					Data      string          `jagsqlb:"data"`
+					InnerData innerTestStruct `jagsqlb:";omit-update"`
+				}{
+					Data: "outer",
+					InnerData: innerTestStruct{
+						Data: "inner",
+					},
+				},
+			},
+			wants: wants{
+				cols: []string{"data"},
+				vals: []any{"outer"},
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Success; With QueryMarshaler Implemented",
 			args: args{
 				input: struct {
@@ -149,7 +191,7 @@ func TestColumnTagParser(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotCols, gotVals, err := ParseColumnTag(tt.args.input)
+			gotCols, gotVals, err := ParseColumnTag(tt.args.queryType, tt.args.input)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.wants.cols, gotCols)
 			assert.Equal(t, tt.wants.vals, gotVals)
