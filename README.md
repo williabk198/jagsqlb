@@ -334,6 +334,37 @@ type TestData struct {
 
 *__NOTE:__* As you can see with the above example, you do not have to provide a column name if so desired.
 
+#### Omitting on Insert Only
+
+If there is a property that you do not want to be included while inserting but should be included while updating,
+you can use the `omit-insert` tag like so:
+
+```go
+type TestData[T any] struct {
+  SomeValue T `jagsqlb:"some_val;omit-insert"`
+}
+```
+
+#### Omitting on Update Only
+
+There is also an option to omit a value while updating, but include it for inserting. This is particularly useful
+if there is a foreign key value that should not be updated.
+
+```go
+type Person struct {
+  ID          uuid.UUID `jagsqlb:";omit"`
+  Name        string    `jagsqlb:"full_name"`
+  DateOfBirth time.Time `jagsqlb:"dob"`
+}
+
+type Address struct {
+  ID       uuid.UUID `jagsqlb:";omit"`
+  PersonID uuid.UUID `jagsqlb:"person_id;omit-update"`
+  // ...
+}
+
+```
+
 ### Inlining Nested Structs
 
 If the struct that you are using to insert or update entries in the database has a nested struct within it that
