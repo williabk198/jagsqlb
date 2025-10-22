@@ -129,7 +129,7 @@ func Test_deleteBuilder_Where(t *testing.T) {
 		want builders.ReturningWhereBuilder
 	}{
 		{
-			name: "Success",
+			name: "Success; Single Condition",
 			d:    deleteBuilder{},
 			args: args{
 				condition: condition.Equals("col1", 52),
@@ -138,6 +138,23 @@ func Test_deleteBuilder_Where(t *testing.T) {
 				mainQuery: deleteBuilder{},
 				conditions: whereConditions{
 					{condition: condition.Equals("col1", 52)},
+				},
+			},
+		},
+		{
+			name: "Success; Multiple Conditions",
+			d:    deleteBuilder{},
+			args: args{
+				condition: condition.Equals("col1", 52),
+				moreConditions: []incondition.Condition{
+					condition.GreaterThan("col2", 77),
+				},
+			},
+			want: returningWhereBuilder{
+				mainQuery: deleteBuilder{},
+				conditions: whereConditions{
+					{condition: condition.Equals("col1", 52)},
+					{conjunction: "AND", condition: condition.GreaterThan("col2", 77)},
 				},
 			},
 		},
