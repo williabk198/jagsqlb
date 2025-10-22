@@ -61,7 +61,7 @@ func (d deleteBuilder) Using(table string) builders.DeleteBuilder {
 
 // Where implements builders.DeleteBuilder.
 func (d deleteBuilder) Where(condition incondition.Condition, moreConditions ...incondition.Condition) builders.ReturningWhereBuilder {
-	rwb := returningWhereBuilder{
+	var rwb builders.ReturningWhereBuilder = returningWhereBuilder{
 		mainQuery: d,
 		conditions: whereConditions{
 			{condition: condition},
@@ -69,7 +69,7 @@ func (d deleteBuilder) Where(condition incondition.Condition, moreConditions ...
 	}
 
 	if len(moreConditions) > 0 {
-		rwb.And(moreConditions[0], moreConditions[1:]...)
+		rwb = rwb.And(moreConditions[0], moreConditions[1:]...)
 	}
 
 	return rwb
