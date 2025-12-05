@@ -27,11 +27,13 @@ func (rb returningBuilder) Build() (string, []any, error) {
 	sb := new(strings.Builder)
 	sb.WriteString(query[:len(query)-1])
 
-	sb.WriteString(" RETURNING ")
-	sb.WriteString(rb.returningColumns[0].String())
-	for i := 1; i < len(rb.returningColumns); i++ {
-		sb.WriteString(", ")
-		sb.WriteString(rb.returningColumns[i].String())
+	if len(rb.returningColumns) > 0 {
+		sb.WriteString(" RETURNING ")
+		sb.WriteString(rb.returningColumns[0].String())
+		for i := 1; i < len(rb.returningColumns); i++ {
+			sb.WriteString(", ")
+			sb.WriteString(rb.returningColumns[i].String())
+		}
 	}
 	sb.WriteRune(';')
 
