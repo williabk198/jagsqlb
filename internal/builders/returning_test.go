@@ -52,6 +52,18 @@ func Test_returningBuilder_Build(t *testing.T) {
 			assertion: assert.NoError,
 		},
 		{
+			name: "Success; No Columns Provided",
+			rb: returningBuilder{
+				prevBuilder:      NewInsertBuilder("table1").Data(struct{ Data string }{"test"}),
+				returningColumns: []intypes.Column{},
+			},
+			wants: wants{
+				query:  `INSERT INTO "table1" ("Data") VALUES ($1);`,
+				params: []any{"test"},
+			},
+			assertion: assert.NoError,
+		},
+		{
 			name: "Error; ErrorSlice not Empty",
 			rb: returningBuilder{
 				errs: intypes.ErrorSlice{assert.AnError},
